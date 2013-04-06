@@ -10,8 +10,5 @@ A round keeper for tabletop games where there is an initiative order. The interf
 - Add other statistics to be tracked
 - Modify statistics of any Actors
 
-On the agenda:
-1. Convert to Maven project
-2. Implement GUI
 
-Currently working on converting this to a maven project.
+Currently Working On: Implementing GUI
