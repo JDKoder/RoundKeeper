@@ -1,0 +1,12 @@
+<ivysettings>
+    <settings defaultResolver="default-chain"/>
+    <resolvers>
+		<chain name="default-chain">
+			<ibiblio name="central" m2compatible="true"/>
+			<url name="swt-repo" m2compatible="true">
+			  <artifact pattern="http://maven.eclipse.org/nexus/content/repositories/testing/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]"/>
+			</url>
+		</chain>
+    </resolvers>
+    <caches useOrigin="true"/>
+</ivysettings>

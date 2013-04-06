@@ -1,0 +1,89 @@
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="RoundKeeper" default="build">
+    <!-- ================================= 
+          target: resolve              
+         ================================= -->
+    <!-- <target name="init.deps" description="Download (if needed) and resolve the dependencies.">
+		<path id="ivy.lib.path">
+			<fileset dir="${basedir}/lib" includes="*.jar"/>
+		</path>
+		<taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpathref="ivy.lib.path"/>
+		<ivy:cachepath pathid="ivy.lib.path" />
+
+		<property name="deps.init" value="true"/>
+
+	</target> depends="init.deps"-->
+	
+	<target name="resolve" description="--> retrieve dependencies with ivy" unless="resolve.init">
+        <path id="ivy.lib.path">
+			<fileset dir="${basedir}/lib" includes="*.jar"/>
+		</path>
+		
+		<ivy:settings id="basic.settings" file="${basedir}/settings/ivysettings.xml"/>
+		<ivy:retrieve settingsRef="basic.settings"/>
+		<ivy:resolve />
+		<property name="resolve.init" value="true"/>
+    </target>	
+	
+  <target name="init">
+	<property name="sourceDir" value="src" />
+  	<property name="testDir" value="test" />
+	<property name="targetDir" value="target" />
+  	<property name="reportDir" value="${targetDir}/reports" />
+	<property name="outputDir" value="${targetDir}/classes" />
+  	<property name="outputTestDir" value="${targetDir}/${testDir}" />
+	<property name="jarName" value="RoundKeeper.jar" />
+  </target>
+  
+  <target name="clean" depends="init">
+	<delete dir="${targetDir}" />
+  </target>
+  
+  <target name="prep" depends="clean, resolve">
+	<mkdir dir="${reportDir}" />
+  	<mkdir dir="${outputDir}" />
+  	<mkdir dir="${outputTestDir}" />
+  </target>
+  
+  <target name="compile" depends="prep">
+	<javac srcdir="${sourceDir}" destdir="${outputDir}" includeantruntime="false">
+		<include name="**/*.java"/>
+		<classpath>
+			<path refid="ivy.lib.path" />
+		</classpath>
+	</javac>
+	
+	<jar basedir="${outputDir}" destfile="${targetDir}/${jarName}"/>
+	<path id="target.compiled">
+		<fileset dir="${targetDir}" includes="*.jar"/>
+	</path>
+  </target>
+	
+  <target name="compiletests" depends="resolve, compile">
+  	<javac srcdir="${testDir}" destdir="${outputTestDir}" includeantruntime="false">
+		<include name="**/*.java"/>
+		<classpath>
+			<path refid="ivy.lib.path" />
+			<path refid="target.compiled"/>
+		</classpath>
+	</javac>
+  </target>
+  
+  <target name="test" depends="compiletests">
+  		<junit>
+  			<batchtest haltonfailure="true" todir="${reportDir}">
+  				<fileset dir="${outputTestDir}" includes="**/*Test.java" />
+  			</batchtest>
+  		</junit>
+  </target>
+  
+  <target name="build" depends="test">
+	<jar basedir="${outputDir}" destfile="${targetDir}/${jarName}">
+		<manifest>
+		<attribute name="Main-Class"
+            value="RoundKeeper"/>
+		</manifest>
+	</jar>
+  </target>
+  
+  
+</project>

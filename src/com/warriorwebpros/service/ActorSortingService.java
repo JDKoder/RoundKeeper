@@ -47,13 +47,11 @@ public class ActorSortingService {
 	public List<Actor> breakTiedInitiatives(List<Actor> actorList) {
 		for(Actor actor1 : actorList) {
 			int index1 = actorList.indexOf(actor1);
-			//actorList.remove(actor1);//Don't test against the same object
 			for(Actor actor2 : actorList){
 				int index2 = actorList.indexOf(actor2);
 				if(index1 == index2){
 					continue;
 				}
-				//actorList.remove(actor2);
 				List<Actor> uniqueInitiatives;
 				if(isSameInitiative(actor1, actor2)) {
 					uniqueInitiatives = breakInitiativeTie(actor1, actor2);
@@ -62,7 +60,6 @@ public class ActorSortingService {
 				} else {
 					continue;
 				}
-				//Add them back in reverse order we removed them.
 				actorList.set(index1,actor1);
 				actorList.set(index2,actor2);
 			}
