@@ -11,4 +11,5 @@ A round keeper for tabletop games where there is an initiative order. The interf
 - Modify statistics of any Actors
 
 
-Currently Working On: Implementing GUI
+Currently Working On: 
+Implementing GUI
