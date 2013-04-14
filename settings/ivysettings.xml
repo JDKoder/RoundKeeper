@@ -4,7 +4,8 @@
 		<chain name="default-chain">
 			<ibiblio name="central" m2compatible="true"/>
 			<url name="swt-repo" m2compatible="true">
-			  <artifact pattern="http://maven.eclipse.org/nexus/content/repositories/testing/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]"/>
+			  <!-- <artifact pattern="http://maven.eclipse.org/nexus/content/repositories/testing/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]"/> -->
+			  <artifact pattern="https://swt-repo.googlecode.com/svn/repo/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]"/>
 			</url>
 		</chain>
     </resolvers>

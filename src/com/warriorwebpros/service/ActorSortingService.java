@@ -1,6 +1,8 @@
 package com.warriorwebpros.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
@@ -18,6 +20,7 @@ public class ActorSortingService {
 	public List<Actor> setOrderByInitiative(List<Actor> actorList) {
 		//Iterator starts with last in order.
 		int i_order = actorList.size() - 1;
+		resetActorOrder(actorList);
 		while(true){
 			Actor sortedActor = actorList.get(i_order);
 			actorList.remove(i_order);
@@ -35,6 +38,13 @@ public class ActorSortingService {
 		}
 		return actorList;
 	}
+	
+	protected List<Actor> resetActorOrder(List<Actor> actorList){
+		for(int i=0; i < actorList.size();i++){
+			actorList.get(i).setOrder(0);
+		}
+		return actorList;
+	}
 
 	/**
 	 * This class iterates through all of the Actors and mutates the initiatives
@@ -45,6 +55,7 @@ public class ActorSortingService {
 	 * @return List<Actor> actorList
 	 */
 	public List<Actor> breakTiedInitiatives(List<Actor> actorList) {
+		boolean tieBroken = false;
 		for(Actor actor1 : actorList) {
 			int index1 = actorList.indexOf(actor1);
 			for(Actor actor2 : actorList){
@@ -54,20 +65,67 @@ public class ActorSortingService {
 				}
 				List<Actor> uniqueInitiatives;
 				if(isSameInitiative(actor1, actor2)) {
-					uniqueInitiatives = breakInitiativeTie(actor1, actor2);
-					actor1 = uniqueInitiatives.get(0);
-					actor2 = uniqueInitiatives.get(1);
+					uniqueInitiatives = breakInitiativeTie(actor1, actor2);				
+					actorList.set(index1,uniqueInitiatives.get(0));
+					actorList.set(index2,uniqueInitiatives.get(1));
+					actorList = 
+							increaseHigherInitiativeThanActor(actorList,
+															  getActorWithHigherInitiative(
+																	  actorList.get(index1), 
+																	  actorList.get(index2)));
 				} else {
 					continue;
 				}
-				actorList.set(index1,actor1);
-				actorList.set(index2,actor2);
 			}
 		}
 		return actorList;
 	}
 	
+	private Actor getActorWithHigherInitiative(Actor a, Actor b){
+		Actor returnActor;
+		int higherInitiative = getHigherInitiative(a.getInitiative(),b.getInitiative());
+		if(a.getInitiative() == higherInitiative){
+			returnActor = a;
+		} else {
+			returnActor = b;
+		}
+		return returnActor;
+	}
+	
+	private List<Actor> increaseHigherInitiativeThanActor(List<Actor> list, Actor actorToBeat){
+		for(int i=0; i<list.size(); i++){
+			if(list.get(i).getInitiative() >= actorToBeat.getInitiative() &&
+			   list.get(i) != actorToBeat){
+				   list.get(i).setInitiative(list.get(i).getInitiative() +1);
+			}
+		}
+		return list;
+	}
+	/**
+	 * Based on the unique order property of each Actor type in the list, 
+	 * this function orders the List.
+	 * 
+	 * @param actorList
+	 * @return sorted actorList
+	 */
+	public List<Actor> orderActorList(List<Actor> actorList){
+		actorList = breakTiedInitiatives(actorList);
+		actorList = setOrderByInitiative(actorList);
+		Collections.sort(actorList, new ActorComparator());
+		return actorList;
+	}
+	
+	public class ActorComparator implements Comparator<Actor> {
+		@Override
+		public int compare(Actor a1, Actor a2) {
+			return a1.getOrder() - a2.getOrder();
+		}
+	}
+	
 	public List<Actor> breakInitiativeTie(Actor a1, Actor a2){
+		if(random == null){
+			random = new Random();
+		}
 		List<Actor> returnList = new ArrayList<Actor>();
 		if(random.nextInt(2)+1 == 1){
 			a1.setInitiative(a1.getInitiative()+1);

@@ -1,6 +1,10 @@
 package com.warriorwebpros.service;
 
 import static org.junit.Assert.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,20 +27,24 @@ public class ActorSortingServiceTest {
 	}
 
 	@Test
-	public void testSetOrderByInitiatives() {
-		/*Actor a = new Actor();
-		Actor b = new Actor();
-		Actor c = new Actor();
-		
-		//Simulate all separate initiatives
-		a.setInitiative(14); //Expected order: 1
-		b.setInitiative(15); // :0
-		c.setInitiative(13); // :2
-		*/
+	public void testResetActorOrder(){
 		List<Actor> actorList = new ArrayList<Actor>();
-		actorList.add(0,makeActorWithInitiative(14));
-		actorList.add(1,makeActorWithInitiative(15));
-		actorList.add(2,makeActorWithInitiative(13));
+		actorList.add(0,makeActorWithInitiative(1));
+		actorList.add(1,makeActorWithInitiative(3));
+		actorList.get(0).setOrder(2);
+		actorList.get(1).setOrder(1);
+		actorList = serviceUnderTest.resetActorOrder(actorList);
+		assertEquals("Expected order to be 0", 0, actorList.get(0).getOrder());
+		assertEquals("Expected order to be 0", 0, actorList.get(1).getOrder());
+	}
+	
+	@Test
+	public void testSetOrderByInitiatives() {
+		//Need to set order and Initiative on two actors and simulate passing in an unordered actor
+		List<Actor> actorList = new ArrayList<Actor>();
+		actorList.add(0,makeOrderedActorWithInitiative(initiative(14), order(1)));
+		actorList.add(1,makeOrderedActorWithInitiative(initiative(15), order(0)));
+		actorList.add(2,makeActorWithInitiative(initiative(13)));
 		
 		actorList = serviceUnderTest.setOrderByInitiative(actorList);
 		
@@ -46,16 +54,24 @@ public class ActorSortingServiceTest {
 		assertEquals("Expect Actor c's order to be 2: ", 2, actorList.get(2).getOrder());
 	}
 	
+	private int order(int i){
+		return i;
+	}
+	
+	private int initiative(int i){
+		return i;
+	}
+	
+	/**
+	 * Test that breaking a tie breaks the tie, and increases all other initiatives
+	 * so their sorted order will remain intact.
+	 */
 	@Test
 	public void testBreakTiedInitiatives() {
-		Actor a = new Actor();
-		Actor b = new Actor();
-		Actor c = new Actor();
-		
-		//Simulate an initiative tie
-		a.setInitiative(1);
-		b.setInitiative(1);
-		c.setInitiative(2);
+		//Simulate a tied initiative
+		Actor a = makeOrderedActorWithInitiative(initiative(1), order(1));
+		Actor b = makeOrderedActorWithInitiative(initiative(2), order(0));
+		Actor c = makeActorWithInitiative(1);
 		
 		List<Actor> actorList = new ArrayList<Actor>();
 		actorList.add(0,a);
@@ -64,22 +80,26 @@ public class ActorSortingServiceTest {
 		
 		Random random = mock(Random.class);
 		serviceUnderTest.setRandom(random);
-		when(random.nextInt(2)).thenReturn(1);
+		when(random.nextInt(2)).thenReturn(1).//Increase c's initiative by 1 to tie with b
+								thenReturn(0);//Increase b's initiative so it is greater than c.
 		
 		actorList = serviceUnderTest.breakTiedInitiatives(actorList);
 		assertEquals("actorList should be the same size:",3,actorList.size());
-		assertEquals("Actor 1 should have initiative 1",1,actorList.get(0).getInitiative());
-		assertEquals("Actor 2 should have initiative 2",2,actorList.get(1).getInitiative());
-		assertEquals("Actor 3 should have initiative 3",3,actorList.get(2).getInitiative());
+		assertThat("Expected that actor a and b have different initiatives", 
+				actorList.get(0).getInitiative(), is(not(actorList.get(1).getInitiative())));
+		assertThat("Expected that actor b and c have different initiatives", 
+				actorList.get(0).getInitiative(), is(not(actorList.get(2).getInitiative())));
+		
+		assertEquals("Actor a should have initiative 1",initiative(1),actorList.get(0).getInitiative());
+		assertEquals("Actor b should have initiative 3",initiative(3),actorList.get(1).getInitiative());
+		assertEquals("Actor c should have initiative 2",initiative(2),actorList.get(2).getInitiative());
 	}
 	
 	@Test
 	public void testBreakTieFirstActor(){
 		/**given two actors with the same initiative **/
-		Actor a1 = new Actor();
-		Actor a2 = new Actor();
-		a1.setInitiative(1);//0
-		a2.setInitiative(1);//1
+		Actor a1 = makeActorWithInitiative(1);
+		Actor a2 = makeActorWithInitiative(1);
 		//Mock the random generator so we can make this 
 		//unit test deterministic.
 		Random random = mock(Random.class);
@@ -99,8 +119,8 @@ public class ActorSortingServiceTest {
 	@Test
 	public void testBreakTieSecondActor(){
 		/**given two actors with the same initiative **/
-		int actor1I = 1;
-		int actor2I = 1;
+		Actor a1 = makeActorWithInitiative(1);
+		Actor a2 = makeActorWithInitiative(1);
 		//Mock the random generator so we can make this 
 		//unit test deterministic.
 		Random random = mock(Random.class);
@@ -108,12 +128,10 @@ public class ActorSortingServiceTest {
 		when(random.nextInt(2)).thenReturn(1);
 		List<Actor> actorList;
 		/** when we get back the actors in a list **/
-		actorList = serviceUnderTest.breakInitiativeTie(
-										makeActorWithInitiative(actor1I), 
-										makeActorWithInitiative(actor2I));
+		actorList = serviceUnderTest.breakInitiativeTie(a1, a2);
 		/** Then verify that the random Number generated updated the initiative of actor 2 **/
-		actor1I = actorList.get(0).getInitiative();
-		actor2I = actorList.get(1).getInitiative();//retrieve actor 2 from list
+		int actor1I = actorList.get(0).getInitiative();
+		int actor2I = actorList.get(1).getInitiative();//retrieve actor 2 from list
 		verify(random).nextInt(2);
 		assertEquals("Actor 1 should now have an initiative Score of 1:", 1, actor1I);
 		assertEquals("Actor 2 should now have an initiative Score of 2:", 2, actor2I);
@@ -130,12 +148,30 @@ public class ActorSortingServiceTest {
 		int2 = 415;
 		higherNumber = serviceUnderTest.getHigherInitiative(int1,int2);
 		assertEquals("Higher Number is should be returned:",415, higherNumber);
+	}
+	
+	@Test
+	public void testDefaultOrderActorListOrdersObjectsCorrectly(){
+		List<Actor> actorList = new ArrayList<Actor>();
+		actorList.add(0,makeActorWithInitiative(3));
+		actorList.add(1,makeActorWithInitiative(60));
+		actorList.add(2,makeActorWithInitiative(20));
 		
+		actorList = serviceUnderTest.orderActorList(actorList);
+		assertEquals("Expected Actor with initiative 60 to be first in the array.",60, actorList.get(0).getInitiative());
+		assertEquals("Expected Actor with initiative 20 to be second in the array.",20, actorList.get(1).getInitiative());
+		assertEquals("Expected Actor with initiative 60 to be first in the array.",3, actorList.get(2).getInitiative());
 	}
 	
 	private Actor makeActorWithInitiative(int i){
 		Actor a = new Actor();
 		a.setInitiative(i);
+		return a;
+	}
+	
+	private Actor makeOrderedActorWithInitiative(int initiative, int order){
+		Actor a = makeActorWithInitiative(initiative);
+		a.setOrder(order);
 		return a;
 	}
 }

@@ -1,19 +1,6 @@
 <project xmlns:ivy="antlib:org.apache.ivy.ant" name="RoundKeeper" default="build">
-    <!-- ================================= 
-          target: resolve              
-         ================================= -->
-    <!-- <target name="init.deps" description="Download (if needed) and resolve the dependencies.">
-		<path id="ivy.lib.path">
-			<fileset dir="${basedir}/lib" includes="*.jar"/>
-		</path>
-		<taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpathref="ivy.lib.path"/>
-		<ivy:cachepath pathid="ivy.lib.path" />
 
-		<property name="deps.init" value="true"/>
-
-	</target> depends="init.deps"-->
-	
-	<target name="resolve" description="--> retrieve dependencies with ivy" unless="resolve.init">
+   <target name="resolve" description="--> retrieve dependencies with ivy" unless="resolve.init">
         <path id="ivy.lib.path">
 			<fileset dir="${basedir}/lib" includes="*.jar"/>
 		</path>
@@ -22,7 +9,7 @@
 		<ivy:retrieve settingsRef="basic.settings"/>
 		<ivy:resolve />
 		<property name="resolve.init" value="true"/>
-    </target>	
+   </target>	
 	
   <target name="init">
 	<property name="sourceDir" value="src" />
@@ -69,9 +56,9 @@
   </target>
   
   <target name="test" depends="compiletests">
-  		<junit>
+  		<junit haltonerror="false" haltonfailure="false">
   			<batchtest haltonfailure="true" todir="${reportDir}">
-  				<fileset dir="${outputTestDir}" includes="**/*Test.java" />
+  				<fileset dir="${outputTestDir}" includes="**/*.java" />
   			</batchtest>
   		</junit>
   </target>
@@ -80,7 +67,7 @@
 	<jar basedir="${outputDir}" destfile="${targetDir}/${jarName}">
 		<manifest>
 		<attribute name="Main-Class"
-            value="RoundKeeper"/>
+            value="RoundKeeperApplication"/>
 		</manifest>
 	</jar>
   </target>

@@ -2,9 +2,23 @@ package com.warriorwebpros.model;
 
 public class Actor {
 
+	private String name;
 	private int initiative;
 	private int order;
 	private ActorType type;
+	
+	public Actor(String name, int initiative){
+		this.name = name;
+		this.initiative = initiative;
+	}
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 	
 	public ActorType getType() {
 		return type;
