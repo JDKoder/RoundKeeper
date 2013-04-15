@@ -56,7 +56,7 @@
   </target>
   
   <target name="test" depends="compiletests">
-  		<junit haltonerror="false" haltonfailure="false">
+  		<junit haltonerror="true" haltonfailure="true">
   			<batchtest haltonfailure="true" todir="${reportDir}">
   				<fileset dir="${outputTestDir}" includes="**/*.java" />
   			</batchtest>
@@ -67,7 +67,7 @@
 	<jar basedir="${outputDir}" destfile="${targetDir}/${jarName}">
 		<manifest>
 		<attribute name="Main-Class"
-            value="RoundKeeperApplication"/>
+            value="Main"/>
 		</manifest>
 	</jar>
   </target>
