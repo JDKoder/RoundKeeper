@@ -55,7 +55,6 @@ public class ActorSortingService {
 	 * @return List<Actor> actorList
 	 */
 	public List<Actor> breakTiedInitiatives(List<Actor> actorList) {
-		boolean tieBroken = false;
 		for(Actor actor1 : actorList) {
 			int index1 = actorList.indexOf(actor1);
 			for(Actor actor2 : actorList){
@@ -162,5 +161,56 @@ public class ActorSortingService {
 
 	public void setRandom(Random random) {
 		this.random = random;
+	}
+
+	/**
+	* If the array size is large enough, swap the actor's orderDependentVariables.
+	* 
+	* @param actorIndex (The index the actor is located in the list)
+	* @param actorList
+	*/
+	public List<Actor> swapWithNextActor(Actor delayingActor, List<Actor> masterList) {
+		if(canSwap(masterList)){ //Don't swap anything if there isn't anything to swap
+			int delayingActorIndex = masterList.indexOf(delayingActor);
+			Actor delayedActor = masterList.get(delayingActorIndex);
+			int nextActorIndex = getNextActorIndex(delayingActorIndex, masterList);
+			Actor nextActor = masterList.get(nextActorIndex);
+			swapOrderDependentValues(delayedActor, nextActor);
+			masterList.set(delayingActorIndex, delayedActor);
+			masterList.set(nextActorIndex, nextActor);
+			Collections.sort(masterList, new ActorComparator());
+		}
+		return masterList;
+	}
+	
+	public void swapOrderDependentValues(Actor a1, Actor a2){
+		swapOrder(a1, a2);
+		swapInitiative(a1, a2);
+	}
+	
+	public void swapOrder(Actor a1, Actor a2) {
+		Actor temp = new Actor();
+		temp.setOrder(a1.getOrder());
+		a1.setOrder(a2.getOrder());
+		a2.setOrder(temp.getOrder());
+	}
+	
+	public void swapInitiative(Actor a1, Actor a2) {
+		Actor temp = new Actor();
+		temp.setInitiative(a1.getInitiative());
+		a1.setInitiative(a2.getInitiative());
+		a2.setInitiative(temp.getInitiative());
+	}
+	
+	private int getNextActorIndex(int lastIndex, List<Actor>actorList){
+		int nextIndex = lastIndex + 1;
+		if(nextIndex >= actorList.size()){
+			nextIndex = 0;
+		}
+		return nextIndex;
+	}
+	
+	private boolean canSwap(List<?> list){
+		return list.size() > 1;
 	}
 }

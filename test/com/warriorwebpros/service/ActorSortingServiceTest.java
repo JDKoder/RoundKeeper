@@ -39,6 +39,71 @@ public class ActorSortingServiceTest {
 	}
 	
 	@Test
+	public void testSwapActorsOrder(){
+		Actor a1 = makeOrderedActorWithInitiative(initiative(1), order(1));
+		Actor a2 = makeOrderedActorWithInitiative(initiative(2), order(0));
+		
+		serviceUnderTest.swapOrder(a1, a2);
+		
+		assertEquals("expected a1 order to be equal to 0:", 0, a1.getOrder());
+		assertEquals("expected a2 order to be equal to 1:", 1, a2.getOrder());
+	}
+	
+	@Test
+	public void testSwapActorsInitiative(){
+		Actor a1 = makeOrderedActorWithInitiative(initiative(1), order(1));
+		Actor a2 = makeOrderedActorWithInitiative(initiative(2), order(0));
+		
+		serviceUnderTest.swapInitiative(a1, a2);
+		
+		assertEquals("expected a1 Initiative to be equal to 2:", 2, a1.getInitiative());
+		assertEquals("expected a2 Initiative to be equal to 1:", 1, a2.getInitiative());
+	}
+	
+	@Test
+	public void testSwapWithNextActorSwapsActorsInList(){
+		Actor a1 = makeNamedOrderedActorWithInitiative(name("a1"), initiative(2), order(0));
+		Actor a2 = makeNamedOrderedActorWithInitiative(name("a2"), initiative(1), order(1));
+		List<Actor> actorList = new ArrayList<Actor>();
+		actorList.add(0,a1);
+		actorList.add(1,a2);
+		
+		List<Actor> returnList = serviceUnderTest.swapWithNextActor(a1, actorList);
+		
+		assertEquals("Expected returned list to be the same size:", 2, returnList.size());
+		assertEquals("Object with name 'a2' should now be first in the list:", name("a2"), returnList.get(0).getName());
+		assertEquals("object with name 'a1' should now be second in the list:", name("a1"), returnList.get(1).getName());
+	}
+	
+	@Test
+	public void testLastIndexSwapsWithFirstInList(){
+		Actor a1 = makeNamedOrderedActorWithInitiative(name("a1"), initiative(3), order(0));
+		Actor a2 = makeNamedOrderedActorWithInitiative(name("a2"), initiative(2), order(1));
+		Actor a3 = makeNamedOrderedActorWithInitiative(name("a3"), initiative(1), order(2));
+		List<Actor> actorList = new ArrayList<Actor>();
+		actorList.add(0,a1);
+		actorList.add(1,a2);
+		actorList.add(2,a3);
+		
+		List<Actor> returnList = serviceUnderTest.swapWithNextActor(a3, actorList); //attempts to swap the last object in the list
+		
+		assertEquals("Expected returned list to be the same size:", 3, returnList.size());
+		assertEquals("Object with name 'a3' should now be first in the list:", name("a3"), returnList.get(0).getName());
+		assertEquals("object with name 'a1' should now be last in the list:", name("a1"), returnList.get(2).getName());
+	}
+	
+	@Test
+	public void testSwapActorsUnswappable(){
+		Actor a1 = makeNamedOrderedActorWithInitiative(name("a1"), initiative(2), order(0));
+		List<Actor> actorList = new ArrayList<Actor>();
+		actorList.add(0,a1);
+		
+		List<Actor> returnList = serviceUnderTest.swapWithNextActor(a1, actorList);
+		
+		assertEquals("Expected returned list to be the same size:", 1, returnList.size());
+	}
+	
+	@Test
 	public void testSetOrderByInitiatives() {
 		//Need to set order and Initiative on two actors and simulate passing in an unordered actor
 		List<Actor> actorList = new ArrayList<Actor>();
@@ -52,14 +117,6 @@ public class ActorSortingServiceTest {
 		assertEquals("Expect Actor a's order to be 1: ", 1, actorList.get(0).getOrder());
 		assertEquals("Expect Actor b's order to be 0: ", 0, actorList.get(1).getOrder());
 		assertEquals("Expect Actor c's order to be 2: ", 2, actorList.get(2).getOrder());
-	}
-	
-	private int order(int i){
-		return i;
-	}
-	
-	private int initiative(int i){
-		return i;
 	}
 	
 	/**
@@ -173,5 +230,23 @@ public class ActorSortingServiceTest {
 		Actor a = makeActorWithInitiative(initiative);
 		a.setOrder(order);
 		return a;
+	}
+	
+	private Actor makeNamedOrderedActorWithInitiative(String name, int initiative, int order) {
+		Actor a = makeOrderedActorWithInitiative(initiative, order);
+		a.setName(name);
+		return a;
+	}
+	
+	private int order(int i){
+		return i;
+	}
+	
+	private int initiative(int i){
+		return i;
+	}
+	
+	private String name(String name){
+		return name;
 	}
 }

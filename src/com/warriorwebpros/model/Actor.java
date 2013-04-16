@@ -3,6 +3,7 @@ package com.warriorwebpros.model;
 public class Actor {
 
 	private String name;
+	private int hitPoints;
 	private int initiative;
 	private int order;
 	private ActorType type;
@@ -12,8 +13,22 @@ public class Actor {
 		this.initiative = initiative;
 	}
 	
+	public Actor(String name, int initiative, int hitpoints){
+		this.name = name;
+		this.initiative = initiative;
+		this.hitPoints = hitpoints;
+	}
+	
 	public String getName() {
 		return name;
+	}
+	
+	public int getHitpoints() {
+		return hitPoints;
+	}
+	
+	public void setHitpoints(int hitpoints) {
+		this.hitPoints = hitpoints;
 	}
 
 	public void setName(String name) {

@@ -51,6 +51,7 @@ public class ActorTableView implements IRoundKeeperView, ActorListChangedListene
 	      item.setText (0, actor.getName());
 	      item.setText (1, String.valueOf(actor.getInitiative()));
 	      item.setText (2, String.valueOf(actor.getOrder()));
+	      item.setText (3, String.valueOf(actor.getHitpoints()));
 	    }
 	}
 	

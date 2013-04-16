@@ -19,6 +19,8 @@ public class ActorEntryView implements IRoundKeeperView{
 	private Text txt_Name;
 	private Label lbl_Initiative;
 	private Text txt_Initiative;
+	private Label lbl_HitPoints;
+	private Text txt_HitPoints;
 	private Button btn;
 	private ActorDataService dataService;
 	
@@ -50,6 +52,14 @@ public class ActorEntryView implements IRoundKeeperView{
         
         txt_Initiative = new Text(shell, SWT.SINGLE);
         txt_Initiative.setLayoutData(gridData);
+        
+        //HitPoints Row
+        lbl_HitPoints = new Label(shell, SWT.SINGLE);
+        lbl_HitPoints.setText("Hit Points:");
+        lbl_HitPoints.setLayoutData(gridData);
+        
+        txt_HitPoints = new Text(shell, SWT.SINGLE);
+        txt_HitPoints.setLayoutData(gridData);
         
         //Button Row
         btn = new Button(shell, SWT.PUSH);
@@ -98,12 +108,15 @@ public class ActorEntryView implements IRoundKeeperView{
 		String name = txt_Name.getText();
 		String initiativeRaw = txt_Initiative.getText();
 		Integer initiative = Integer.parseInt(initiativeRaw);
-		return new Actor(name, initiative);
+		String hitPointsRaw = txt_HitPoints.getText();
+		Integer hitPoints = Integer.parseInt(hitPointsRaw);
+		return new Actor(name, initiative, hitPoints);
 	}
 	
 	private void clearFields(){
 		txt_Name.setText("");
 		txt_Initiative.setText("");
+		txt_HitPoints.setText("");
 	}
 	
 	public void setDataService(ActorDataService dataService) {

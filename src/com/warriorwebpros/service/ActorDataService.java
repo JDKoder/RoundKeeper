@@ -44,6 +44,10 @@ public class ActorDataService {
 		notifyListeners();
 	}
 	
+	public void delayActorsTurn(Actor actor){
+		masterList = sortingService.swapWithNextActor(actor, masterList);
+	}
+	
 	public void notifyListeners(){
 		for(ActorListChangedListener listener : listeners){
 			listener.handleActorListChanged(null, masterList);
