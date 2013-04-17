@@ -6,6 +6,7 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
@@ -26,47 +27,49 @@ public class ActorEntryView implements IRoundKeeperView{
 	
 	@Override
 	public void initUI(Shell shell) {
-		GridLayout gl = new GridLayout(2, true);
-        gl.horizontalSpacing = 4;
-        gl.verticalSpacing = 4;
-        gl.marginBottom = 5;
-        gl.marginTop = 5;
-        shell.setLayout(gl);
+        Composite composite = new Composite(shell,SWT.FILL);
+        //composite.setBounds(0, 0, 400, 200);
+        GridLayout compositeGL = new GridLayout(2, false);
+        composite.setLayout(compositeGL);
 
-        GridData gridData = new GridData();
-
-        //Name Row
-        lbl_Name = new Label(shell, SWT.SINGLE);
-        lbl_Name.setText("Name:");
-        lbl_Name.setLayoutData(gridData);
+        GridData gridDataLeft = new GridData();
+        GridData gridDataRight = new GridData(SWT.FILL, SWT.FILL, false, false);
+        gridDataRight.widthHint=220;
+        //gridData.GRAB_HORIZONTAL;
+        //gridData.horizontalSpan = 1;
         
-        txt_Name = new Text(shell, SWT.SINGLE);
-        gridData.horizontalSpan = 1;
-        gridData.horizontalAlignment = GridData.FILL;
-        txt_Name.setLayoutData(gridData);
+        //Name Row
+        lbl_Name = new Label(composite, SWT.SINGLE);
+        lbl_Name.setText("Name:");
+        lbl_Name.setLayoutData(gridDataLeft);
+        
+        txt_Name = new Text(composite, SWT.SINGLE);
+        txt_Name.setLayoutData(gridDataRight);
         
         //Initiative Row
-        lbl_Initiative = new Label(shell, SWT.SINGLE);
-        lbl_Initiative.setText("Inititative:");
-        lbl_Initiative.setLayoutData(gridData);
+        lbl_Initiative = new Label(composite, SWT.SINGLE);
+        lbl_Initiative.setText("Initiative:");
+        lbl_Initiative.setLayoutData(gridDataLeft);
         
-        txt_Initiative = new Text(shell, SWT.SINGLE);
-        txt_Initiative.setLayoutData(gridData);
+        txt_Initiative = new Text(composite, SWT.SINGLE);
+        txt_Initiative.setLayoutData(gridDataRight);
         
         //HitPoints Row
-        lbl_HitPoints = new Label(shell, SWT.SINGLE);
+        lbl_HitPoints = new Label(composite, SWT.SINGLE);
         lbl_HitPoints.setText("Hit Points:");
-        lbl_HitPoints.setLayoutData(gridData);
+        lbl_HitPoints.setLayoutData(gridDataLeft);
         
-        txt_HitPoints = new Text(shell, SWT.SINGLE);
-        txt_HitPoints.setLayoutData(gridData);
+        txt_HitPoints = new Text(composite, SWT.SINGLE);
+        txt_HitPoints.setLayoutData(gridDataRight);
         
         //Button Row
-        btn = new Button(shell, SWT.PUSH);
+        btn = new Button(composite, SWT.PUSH);
         btn.setText("Add To Order");
         GridData gd = new GridData(SWT.FILL, SWT.FILL, false, false);
-        gd.widthHint = 90;
-        gd.heightHint = 30;
+        
+//        gd.widthHint = 90;
+//        gd.heightHint = 30;
+        gd.horizontalSpan = 2;
         btn.setLayoutData(gd);
         addListeners();
 	}

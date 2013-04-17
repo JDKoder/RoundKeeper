@@ -4,19 +4,23 @@ import java.util.ArrayList;
 
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 import com.warriorwebpros.listeners.ActorListChangedListener;
+import com.warriorwebpros.model.Actor;
 import com.warriorwebpros.service.ActorDataService;
 import com.warriorwebpros.views.ActorEntryView;
 import com.warriorwebpros.views.ActorTableView;
+import com.warriorwebpros.views.ButtonControlView;
 
 public class ViewController {
 	private Shell shell;
 	private ActorDataService dataService;
 	private ActorEntryView entry;
 	private ActorTableView table;
+	private ButtonControlView buttons;
 	
 	public ViewController(Display display, Shell shell){
 		this.shell = shell;
@@ -27,6 +31,12 @@ public class ViewController {
 	
 	public void initializeDataEntryView(){
 		//TODO: Inject these views
+		GridLayout gl = new GridLayout(1, true);
+        gl.horizontalSpacing = 4;
+        gl.verticalSpacing = 4;
+        gl.marginBottom = 5;
+        gl.marginTop = 5;
+        shell.setLayout(gl);
 		dataService.setListeners(new ArrayList<ActorListChangedListener>());
 		entry = new ActorEntryView();
 		entry.setDataService(dataService);
@@ -35,6 +45,9 @@ public class ViewController {
 		table.setDataService(dataService);
 		dataService.addListener(table);
 		table.initUI(shell);
+		buttons = new ButtonControlView();
+		buttons.setDataService(dataService);
+		buttons.initUI(shell);
 		shell.pack();
 		shell.open();
 	}

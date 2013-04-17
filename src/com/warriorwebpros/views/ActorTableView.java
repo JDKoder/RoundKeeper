@@ -4,8 +4,11 @@ import java.util.EventObject;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -22,11 +25,11 @@ public class ActorTableView implements IRoundKeeperView, ActorListChangedListene
 	
 	@Override
 	public void initUI(Shell shell) {
-		shell.setLayout(new GridLayout());
 		table = new Table(shell, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
 	    table.setLinesVisible(true);
 	    table.setHeaderVisible(true);
 	    GridData data = new GridData(SWT.FILL, SWT.FILL, true, true);
+	    data.horizontalSpan=2;
 	    data.heightHint = 200;
 	    table.setLayoutData(data);
 
@@ -41,7 +44,9 @@ public class ActorTableView implements IRoundKeeperView, ActorListChangedListene
 	    
 	    for (int i=0; i<titles.length; i++) {
 	      table.getColumn (i).pack ();
-	    } 
+	    }
+	    
+	    addTableSelectionListener();
 	}
 	
 	private void setTableItems(){
@@ -53,7 +58,28 @@ public class ActorTableView implements IRoundKeeperView, ActorListChangedListene
 	      item.setText (2, String.valueOf(actor.getOrder()));
 	      item.setText (3, String.valueOf(actor.getHitpoints()));
 	    }
+		
 	}
+	
+	private void addTableSelectionListener(){
+	    table.addSelectionListener(new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				int itemIndex = table.getSelectionIndex();
+				if(itemIndex > -1){
+					//System.out.println(itemIndex);
+					dataService.setSelectedActor(dataService.getMasterList().get(itemIndex));
+				}
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent arg0) {
+				widgetSelected(arg0);
+				
+			}
+		});
+    }
 	
 	/**
 	 * SWT doesn't automatically garbage collect its UI components.

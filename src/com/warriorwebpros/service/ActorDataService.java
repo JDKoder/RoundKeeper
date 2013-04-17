@@ -15,6 +15,7 @@ import com.warriorwebpros.model.Actor;
 public class ActorDataService {
 	private List<Actor> masterList;
 	private List<ActorListChangedListener> listeners;
+	private Actor selectedActor;
 
 	private ActorSortingService sortingService;
 	
@@ -46,6 +47,7 @@ public class ActorDataService {
 	
 	public void delayActorsTurn(Actor actor){
 		masterList = sortingService.swapWithNextActor(actor, masterList);
+		notifyListeners();
 	}
 	
 	public void notifyListeners(){
@@ -58,7 +60,11 @@ public class ActorDataService {
 		this.listeners = listeners;
 	}
 	
-	//remove actor
-	//updateOrder(Boolean descending);
+	public void setSelectedActor(Actor selectedActor) {
+		this.selectedActor = selectedActor;
+	}
 	
+	public Actor getSelectedActor() {
+		return this.selectedActor;
+	}
 }
