@@ -45,10 +45,17 @@ public class ActorDataService {
 		notifyListeners();
 	}
 	
-	public void delayActorsTurn(Actor actor){
-		masterList = sortingService.swapWithNextActor(actor, masterList);
+	public void removeActor(){
+		masterList.remove(selectedActor);
+		sortingService.orderActorList(masterList);
 		notifyListeners();
 	}
+	
+	public void delayActorsTurn(){
+		masterList = sortingService.swapWithNextActor(selectedActor, masterList);
+		notifyListeners();
+	}
+	
 	
 	public void notifyListeners(){
 		for(ActorListChangedListener listener : listeners){
@@ -62,9 +69,5 @@ public class ActorDataService {
 	
 	public void setSelectedActor(Actor selectedActor) {
 		this.selectedActor = selectedActor;
-	}
-	
-	public Actor getSelectedActor() {
-		return this.selectedActor;
 	}
 }

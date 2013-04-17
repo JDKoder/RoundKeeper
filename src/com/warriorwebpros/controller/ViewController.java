@@ -9,7 +9,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 import com.warriorwebpros.listeners.ActorListChangedListener;
-import com.warriorwebpros.model.Actor;
 import com.warriorwebpros.service.ActorDataService;
 import com.warriorwebpros.views.ActorEntryView;
 import com.warriorwebpros.views.ActorTableView;

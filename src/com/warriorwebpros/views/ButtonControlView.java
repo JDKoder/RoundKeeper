@@ -7,16 +7,14 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Text;
 
-import com.warriorwebpros.model.Actor;
 import com.warriorwebpros.service.ActorDataService;
 
 public class ButtonControlView implements IRoundKeeperView{
 
 	private Button btn_delayTurn;
+	private Button btn_remove;
 	private ActorDataService dataService;
 	
 	@Override
@@ -30,11 +28,15 @@ public class ButtonControlView implements IRoundKeeperView{
         gridDataLeft.widthHint = 110;
         gridDataRight.widthHint = 110;
 
-        //Button Row
+        //Delay Turn
         btn_delayTurn = new Button(composite, SWT.PUSH);
         btn_delayTurn.setText("Delay Turn");
-        
         btn_delayTurn.setLayoutData(gridDataLeft);
+        //Remove
+        btn_remove = new Button(composite, SWT.PUSH);
+        btn_remove.setText("Remove");
+        btn_remove.setLayoutData(gridDataRight);
+        
         addListeners();
 	}
 	
@@ -42,7 +44,19 @@ public class ButtonControlView implements IRoundKeeperView{
 		btn_delayTurn.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
-				dataService.delayActorsTurn(dataService.getSelectedActor());
+				dataService.delayActorsTurn();
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent arg0) {
+				widgetSelected(arg0);				
+			}
+		});
+		
+		btn_remove.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				dataService.removeActor();
 			}
 
 			@Override
