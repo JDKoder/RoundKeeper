@@ -12,4 +12,4 @@ A round keeper for tabletop games where there is an initiative order. The interf
 
 
 Currently Working On: 
-Implementing GUI
+Implementing Spring for IOC
