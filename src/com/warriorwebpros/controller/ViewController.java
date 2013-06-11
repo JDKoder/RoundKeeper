@@ -8,7 +8,9 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
+import com.warriorwebpros.colors.RoundKeeperColorConstants;
 import com.warriorwebpros.listeners.ActorListChangedListener;
+import com.warriorwebpros.listeners.DigitVerificationListener;
 import com.warriorwebpros.service.ActorDataService;
 import com.warriorwebpros.views.ActorEntryView;
 import com.warriorwebpros.views.ActorTableView;
@@ -30,14 +32,17 @@ public class ViewController {
 	
 	public void initializeDataEntryView(){
 		//TODO: Inject these views
-		GridLayout gl = new GridLayout(1, true);
+		GridLayout gl = new GridLayout(2, true);
         gl.horizontalSpacing = 4;
         gl.verticalSpacing = 4;
         gl.marginBottom = 5;
         gl.marginTop = 5;
         shell.setLayout(gl);
+        shell.setBackground(
+        		RoundKeeperColorConstants.GROUP_BACKGROUND.getColor(shell.getDisplay()));
 		dataService.setListeners(new ArrayList<ActorListChangedListener>());
 		entry = new ActorEntryView();
+		entry.setDigitVerifier(new DigitVerificationListener());
 		entry.setDataService(dataService);
 		entry.initUI(shell);
 		table = new ActorTableView();

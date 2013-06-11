@@ -6,9 +6,10 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Shell;
 
+import com.warriorwebpros.colors.RoundKeeperColorConstants;
 import com.warriorwebpros.service.ActorDataService;
 
 public class ButtonControlView implements IRoundKeeperView{
@@ -19,14 +20,18 @@ public class ButtonControlView implements IRoundKeeperView{
 	
 	@Override
 	public void initUI(Shell shell) {
-        Composite composite = new Composite(shell,SWT.FILL);
-        GridLayout compositeGL = new GridLayout(2, true);
-        composite.setLayout(compositeGL);
+        Group composite = new Group(shell,SWT.FILL);
+        composite.setText("Table Controls");
+        GridLayout groupGL = new GridLayout(2, true);
+        composite.setLayout(groupGL);
+        
+        composite.setBackground(
+        		RoundKeeperColorConstants.GROUP_BACKGROUND.getColor(shell.getDisplay()));
 
         GridData gridDataLeft = new GridData();
         GridData gridDataRight = new GridData();
-        gridDataLeft.widthHint = 110;
-        gridDataRight.widthHint = 110;
+        gridDataLeft.widthHint = 155;
+        gridDataRight.widthHint = 155;
 
         //Delay Turn
         btn_delayTurn = new Button(composite, SWT.PUSH);
@@ -34,7 +39,7 @@ public class ButtonControlView implements IRoundKeeperView{
         btn_delayTurn.setLayoutData(gridDataLeft);
         //Remove
         btn_remove = new Button(composite, SWT.PUSH);
-        btn_remove.setText("Remove");
+        btn_remove.setText("Remove Actor");
         btn_remove.setLayoutData(gridDataRight);
         
         addListeners();
@@ -74,6 +79,7 @@ public class ButtonControlView implements IRoundKeeperView{
 	@Override
 	public void cleanUpUI() {
 		btn_delayTurn.dispose();
+		btn_remove.dispose();
 	}
 	
 	public void setDataService(ActorDataService dataService) {

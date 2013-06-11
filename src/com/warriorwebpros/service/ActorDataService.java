@@ -47,7 +47,9 @@ public class ActorDataService {
 	
 	public void removeActor(){
 		masterList.remove(selectedActor);
-		sortingService.orderActorList(masterList);
+		if(masterList.size() > 0){
+			sortingService.orderActorList(masterList);
+		}
 		notifyListeners();
 	}
 	

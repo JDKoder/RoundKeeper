@@ -39,6 +39,12 @@ public class ActorSortingService {
 		return actorList;
 	}
 	
+	/**
+	 * Changes the values of each actor's order property to the default starting
+	 * value.
+	 * @param actorList
+	 * @return actorList
+	 */
 	protected List<Actor> resetActorOrder(List<Actor> actorList){
 		for(int i=0; i < actorList.size();i++){
 			actorList.get(i).setOrder(0);
@@ -80,6 +86,13 @@ public class ActorSortingService {
 		return actorList;
 	}
 	
+	/**
+	 * Compares two actor's by their initiative scores.  Whichever actor
+	 * has a higher score is one returned.
+	 * @param actor1
+	 * @param actor2
+	 * @return
+	 */
 	private Actor getActorWithHigherInitiative(Actor a, Actor b){
 		Actor returnActor;
 		int higherInitiative = getHigherInitiative(a.getInitiative(),b.getInitiative());
