@@ -1,6 +1,6 @@
 package com.warriorwebpros.model;
 
-public class Actor {
+public class Actor implements Comparable<Actor> {
 
 	private String name;
 	private int hitPoints;
@@ -61,5 +61,19 @@ public class Actor {
 	
 	public int getOrder(){
 		return order;
+	}
+	
+	@Override
+	public int compareTo(Actor otherActor) {
+		int comparisonResult = 0;
+		if(otherActor == null) {
+			throw NullPointerException("Actor comparisons should not compare against null.");
+		}
+		if(this.initiative > otherActor.getInitiative()) {
+			comparisonResult = 1;
+		} else if( this.initiative < otherActor.getInitiative()) {
+			comparisonResult = -1;
+		} 
+		return comparisonResult;
 	}
 }
