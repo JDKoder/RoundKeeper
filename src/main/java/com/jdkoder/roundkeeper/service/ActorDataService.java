@@ -1,9 +1,9 @@
-package com.warriorwebpros.service;
+package com.jdkoder.roundkeeper.service;
+
+import com.jdkoder.roundkeeper.listeners.ActorListChangedListener;
+import com.jdkoder.roundkeeper.model.Actor;
 
 import java.util.List;
-
-import com.warriorwebpros.listeners.ActorListChangedListener;
-import com.warriorwebpros.model.Actor;
 
 /**
  * This is the notification service that will update 

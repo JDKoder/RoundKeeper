@@ -1,12 +1,12 @@
-package com.warriorwebpros.service;
+package com.jdkoder.roundkeeper.service;
+
+import com.jdkoder.roundkeeper.model.Actor;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
-
-import com.warriorwebpros.model.Actor;
 
 public class ActorSortingService {
 	

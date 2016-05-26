@@ -1,4 +1,4 @@
-package com.warriorwebpros.model;
+package com.jdkoder.roundkeeper.model;
 
 public class Actor implements Comparable<Actor> {
 
