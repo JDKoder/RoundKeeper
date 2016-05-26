@@ -1,4 +1,4 @@
-package com.warriorwebpros.model;
+package com.jdkoder.roundkeeper.model;
 
 public class Actor implements Comparable<Actor> {
 
@@ -67,7 +67,7 @@ public class Actor implements Comparable<Actor> {
 	public int compareTo(Actor otherActor) {
 		int comparisonResult = 0;
 		if(otherActor == null) {
-			throw NullPointerException("Actor comparisons should not compare against null.");
+			throw new NullPointerException("Actor comparisons should not compare against null.");
 		}
 		if(this.initiative > otherActor.getInitiative()) {
 			comparisonResult = 1;

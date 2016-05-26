@@ -1,10 +1,10 @@
-package com.warriorwebpros.listeners;
+package com.jdkoder.roundkeeper.listeners;
+
+import com.jdkoder.roundkeeper.model.Actor;
 
 import java.util.EventListener;
 import java.util.EventObject;
 import java.util.List;
-
-import com.warriorwebpros.model.Actor;
 
 public interface ActorListChangedListener extends EventListener{
 	public void handleActorListChanged(EventObject event, List<Actor> list);

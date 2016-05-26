@@ -1,4 +1,4 @@
-package com.warriorwebpros.service;
+package com.jdkoder.roundkeeper.service;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -15,7 +15,7 @@ import org.junit.Test;
 
 import static org.mockito.Mockito.*;
 
-import com.warriorwebpros.model.Actor;
+import com.jdkoder.roundkeeper.model.Actor;
 
 public class ActorSortingServiceTest {
 

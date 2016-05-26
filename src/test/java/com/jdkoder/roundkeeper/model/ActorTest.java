@@ -1,4 +1,4 @@
-package com.warriorwebpros.model;
+package com.jdkoder.roundkeeper.model;
 
 import static org.junit.Assert.*;
 
