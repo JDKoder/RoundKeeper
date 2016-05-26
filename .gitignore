@@ -1,4 +1,11 @@
 #################
+#* IntelliJ
+#################
+*.iml
+.idea/*
+out*
+
+#################
 ## Eclipse
 #################
 
@@ -7,7 +14,6 @@
 .metadata
 bin/
 tmp/
-lib/
 target/
 *.tmp
 *.bak
