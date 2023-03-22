@@ -13,3 +13,25 @@ A round keeper for tabletop games where there is an initiative order. The interf
 
 Currently Working On: 
 Implementing Spring for IOC
+
+Dependencies
+----
+Ant
+Ivy
+Java 19
+
+To build:
+-----
+set environment variable IVY2_HOME to your .ivy2 directory
+`export IVY2_HOME=/home/youruser/.ivy2`
+From Roundkeeper directory run
+`ant build`
+
+To Run:
+------
+navigate to _target_ directory
+`java -jar Roundkeeper.jar`
+
+note: be aware if you need to build in a 32 bit environment you'll have to update the build.xml and ivy.xml files to pull the correct swt files or this will not run.
+
+
