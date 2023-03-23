@@ -1,95 +1,92 @@
 <project xmlns:ivy="antlib:org.apache.ivy.ant" name="RoundKeeper" default="build">
-	<!--  Capture essential paths for use by other projects -->
-	<pathconvert targetos="unix" property="basedir.unix">
-		<path location="${basedir}"/>
-	</pathconvert>
 
-	<property name="one-jar.dist.dir" value="./dist"/>
-	<property name="one-jar.version" value="0.97"/>
-	<property name="one-jar.ant.jar" value="${one-jar.dist.dir}/one-jar-ant-task-${one-jar.version}.jar"/>
-	<taskdef name="one-jar" classname="com.simontuffs.onejar.ant.OneJarTask"
-			 classpath="${one-jar.ant.jar}" onerror="report"/>
+    <property name="one-jar.dist.dir" value="./dist"/>
+    <property name="one-jar.version" value="0.97"/>
+    <property name="one-jar.ant.jar" value="${one-jar.dist.dir}/one-jar-ant-task-${one-jar.version}.jar"/>
+    <taskdef name="one-jar" classname="com.simontuffs.onejar.ant.OneJarTask"
+             classpath="${one-jar.ant.jar}" onerror="report"/>
 
-	<target name="resolve" description="--> retrieve dependencies with ivy place them in ${basedir}/lib" unless="resolve.init">
-		<path id="ivy.lib.path">
-			<fileset dir="${basedir}/lib" includes="*.jar"/>
-		</path>
+    <target name="resolve" description="--> retrieve dependencies with ivy place them in ${basedir}/lib"
+            unless="resolve.init">
+        <path id="ivy.lib.path">
+            <fileset dir="${basedir}/lib" includes="*.jar"/>
+        </path>
 
-		<ivy:settings id="basic.settings" file="./settings/ivysettings.xml"/>
-		<ivy:retrieve settingsRef="basic.settings"/>
-		<ivy:resolve />
-		<property name="resolve.init" value="true"/>
-	</target>
+        <ivy:settings id="basic.settings" file="./settings/ivysettings.xml"/>
+        <ivy:retrieve settingsRef="basic.settings"/>
+        <ivy:resolve/>
+        <property name="resolve.init" value="true"/>
+    </target>
 
-	<target name="init">
-		<property name="sourceDir" value="src" />
-		<property name="testDir" value="test" />
-		<property name="targetDir" value="target" />
-		<property name="reportDir" value="${targetDir}/reports" />
-		<property name="outputDir" value="${targetDir}/classes" />
-		<property name="outputTestDir" value="${targetDir}/${testDir}" />
-		<property name="libDir" value="lib" />
-		<property name="jarName" value="RoundKeeper.jar" />
-		<property name="roundKeeperVersion" value="1.0.0.1"/>
-		<property environment="localenv" />
-		<property name="ivy2home" value="${localenv.IVY2_HOME}" />
-		<echo>IVY2_HOME = ${ivy2home}</echo>
-	</target>
+    <target name="init">
+        <property name="sourceDir" value="src"/>
+        <property name="testDir" value="test"/>
+        <property name="targetDir" value="target"/>
+        <property name="reportDir" value="${targetDir}/reports"/>
+        <property name="outputDir" value="${targetDir}/classes"/>
+        <property name="outputTestDir" value="${targetDir}/${testDir}"/>
+        <property name="libDir" value="lib"/>
+        <property name="jarName" value="RoundKeeper.jar"/>
+        <property name="roundKeeperVersion" value="1.0.0.1"/>
+        <property environment="localenv"/>
+        <property name="ivy2home" value="${localenv.IVY2_HOME}"/>
+        <echo>IVY2_HOME = ${ivy2home}</echo>
+    </target>
 
-	<target name="clean" depends="init">
-		<delete dir="${targetDir}" />
-	</target>
+    <target name="clean" depends="init">
+        <delete dir="${targetDir}"/>
+    </target>
 
-	<target name="prep" depends="clean, resolve">
-		<mkdir dir="${reportDir}" />
-		<mkdir dir="${outputDir}" />
-		<mkdir dir="${outputTestDir}" />
-	</target>
+    <target name="prep" depends="clean, resolve">
+        <mkdir dir="${reportDir}"/>
+        <mkdir dir="${outputDir}"/>
+        <mkdir dir="${outputTestDir}"/>
+    </target>
 
-	<target name="compile" depends="prep">
-		<javac srcdir="${sourceDir}" destdir="${outputDir}" includeantruntime="false">
-			<include name="**/*.java"/>
-			<classpath>
-				<path refid="ivy.lib.path" />
-			</classpath>
-		</javac>
+    <target name="compile" depends="prep">
+        <javac srcdir="${sourceDir}" destdir="${outputDir}" includeantruntime="false">
+            <include name="**/*.java"/>
+            <classpath>
+                <path refid="ivy.lib.path"/>
+            </classpath>
+        </javac>
 
-		<jar basedir="${outputDir}" destfile="${targetDir}/${jarName}"/>
-		<path id="target.compiled">
-			<fileset dir="${targetDir}" includes="*.jar"/>
-		</path>
-	</target>
+        <jar basedir="${outputDir}" destfile="${targetDir}/${jarName}"/>
+        <path id="target.compiled">
+            <fileset dir="${targetDir}" includes="*.jar"/>
+        </path>
+    </target>
 
-	<target name="compiletests" depends="resolve, compile">
-		<javac srcdir="${testDir}" destdir="${outputTestDir}" includeantruntime="false">
-			<include name="**/*.java"/>
-			<classpath>
-				<path refid="ivy.lib.path" />
-				<path refid="target.compiled"/>
-			</classpath>
-		</javac>
-	</target>
+    <target name="compiletests" depends="resolve, compile">
+        <javac srcdir="${testDir}" destdir="${outputTestDir}" includeantruntime="false">
+            <include name="**/*.java"/>
+            <classpath>
+                <path refid="ivy.lib.path"/>
+                <path refid="target.compiled"/>
+            </classpath>
+        </javac>
+    </target>
 
-	<target name="test" depends="compiletests">
-		<junit haltonerror="true" haltonfailure="true">
-			<batchtest haltonfailure="true" todir="${reportDir}">
-				<fileset dir="${outputTestDir}" includes="**/*.java" />
-			</batchtest>
-		</junit>
-	</target>
+    <target name="test" depends="compiletests">
+        <junit haltonerror="true" haltonfailure="true">
+            <batchtest haltonfailure="true" todir="${reportDir}">
+                <fileset dir="${outputTestDir}" includes="**/*.java"/>
+            </batchtest>
+        </junit>
+    </target>
 
-	<target name="build-one" depends="test">
-		<one-jar destfile="./target/RoundKeeper-${roundKeeperVersion}.jar">
-			<manifest>
-				<attribute name="Main-Class" value="com.warriorwebpros.Main"/>
-				<attribute name="One-Jar-Main-Class" value="com.warriorwebpros.Main"/>
-			</manifest>
-			<main>
-				<fileset dir="${outputDir}"/>
-			</main>
-			<lib>
-				<fileset dir="${libDir}" includes="*.jar"/>
-			</lib>
-		</one-jar>
-	</target>
+    <target name="build" depends="test">
+        <one-jar destfile="./target/RoundKeeper-${roundKeeperVersion}.jar">
+            <manifest>
+                <attribute name="Main-Class" value="com.warriorwebpros.Main"/>
+                <attribute name="One-Jar-Main-Class" value="com.warriorwebpros.Main"/>
+            </manifest>
+            <main>
+                <fileset dir="${outputDir}"/>
+            </main>
+            <lib>
+                <fileset dir="${libDir}" includes="*.jar"/>
+            </lib>
+        </one-jar>
+    </target>
 </project>
