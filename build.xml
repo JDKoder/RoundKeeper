@@ -8,6 +8,7 @@
 
     <target name="resolve" description="--> retrieve dependencies with ivy place them in ${basedir}/lib"
             unless="resolve.init">
+        <delete dir="${libDir}"/>
         <path id="ivy.lib.path">
             <fileset dir="${basedir}/lib" includes="*.jar"/>
         </path>
@@ -37,6 +38,7 @@
         <delete dir="${targetDir}"/>
     </target>
 
+
     <target name="prep" depends="clean, resolve">
         <mkdir dir="${reportDir}"/>
         <mkdir dir="${outputDir}"/>
@@ -57,7 +59,7 @@
         </path>
     </target>
 
-    <target name="compiletests" depends="resolve, compile">
+    <target name="compiletests" depends="prep, compile">
         <javac srcdir="${testDir}" destdir="${outputTestDir}" includeantruntime="false">
             <include name="**/*.java"/>
             <classpath>
