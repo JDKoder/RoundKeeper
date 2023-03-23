@@ -19,11 +19,11 @@ import com.warriorwebpros.model.Actor;
 
 public class ActorSortingServiceTest {
 
-	ActorSortingService serviceUnderTest;
+	ActorSortingService subject;
 	
 	@Before
 	public void setUp() throws Exception {
-		serviceUnderTest = new ActorSortingService();
+		subject = new ActorSortingService();
 	}
 
 	@Test
@@ -33,7 +33,7 @@ public class ActorSortingServiceTest {
 		actorList.add(1,makeActorWithInitiative(3));
 		actorList.get(0).setOrder(2);
 		actorList.get(1).setOrder(1);
-		actorList = serviceUnderTest.resetActorOrder(actorList);
+		actorList = subject.resetActorOrder(actorList);
 		assertEquals("Expected order to be 0", 0, actorList.get(0).getOrder());
 		assertEquals("Expected order to be 0", 0, actorList.get(1).getOrder());
 	}
@@ -43,7 +43,7 @@ public class ActorSortingServiceTest {
 		Actor a1 = makeOrderedActorWithInitiative(initiative(1), order(1));
 		Actor a2 = makeOrderedActorWithInitiative(initiative(2), order(0));
 		
-		serviceUnderTest.swapOrder(a1, a2);
+		subject.swapOrder(a1, a2);
 		
 		assertEquals("expected a1 order to be equal to 0:", 0, a1.getOrder());
 		assertEquals("expected a2 order to be equal to 1:", 1, a2.getOrder());
@@ -54,7 +54,7 @@ public class ActorSortingServiceTest {
 		Actor a1 = makeOrderedActorWithInitiative(initiative(1), order(1));
 		Actor a2 = makeOrderedActorWithInitiative(initiative(2), order(0));
 		
-		serviceUnderTest.swapInitiative(a1, a2);
+		subject.swapInitiative(a1, a2);
 		
 		assertEquals("expected a1 Initiative to be equal to 2:", 2, a1.getInitiative());
 		assertEquals("expected a2 Initiative to be equal to 1:", 1, a2.getInitiative());
@@ -68,7 +68,7 @@ public class ActorSortingServiceTest {
 		actorList.add(0,a1);
 		actorList.add(1,a2);
 		
-		List<Actor> returnList = serviceUnderTest.swapWithNextActor(a1, actorList);
+		List<Actor> returnList = subject.swapWithNextActor(a1, actorList);
 		
 		assertEquals("Expected returned list to be the same size:", 2, returnList.size());
 		assertEquals("Object with name 'a2' should now be first in the list:", name("a2"), returnList.get(0).getName());
@@ -85,7 +85,7 @@ public class ActorSortingServiceTest {
 		actorList.add(1,a2);
 		actorList.add(2,a3);
 		
-		List<Actor> returnList = serviceUnderTest.swapWithNextActor(a3, actorList); //attempts to swap the last object in the list
+		List<Actor> returnList = subject.swapWithNextActor(a3, actorList); //attempts to swap the last object in the list
 		
 		assertEquals("Expected returned list to be the same size:", 3, returnList.size());
 		assertEquals("Object with name 'a3' should now be first in the list:", name("a3"), returnList.get(0).getName());
@@ -98,7 +98,7 @@ public class ActorSortingServiceTest {
 		List<Actor> actorList = new ArrayList<Actor>();
 		actorList.add(0,a1);
 		
-		List<Actor> returnList = serviceUnderTest.swapWithNextActor(a1, actorList);
+		List<Actor> returnList = subject.swapWithNextActor(a1, actorList);
 		
 		assertEquals("Expected returned list to be the same size:", 1, returnList.size());
 	}
@@ -111,7 +111,7 @@ public class ActorSortingServiceTest {
 		actorList.add(1,makeOrderedActorWithInitiative(initiative(15), order(0)));
 		actorList.add(2,makeActorWithInitiative(initiative(13)));
 		
-		actorList = serviceUnderTest.setOrderByInitiative(actorList);
+		actorList = subject.setOrderByInitiative(actorList);
 		
 		assertEquals("ActorList should be the same size:", 3 ,actorList.size());
 		assertEquals("Expect Actor a's order to be 1: ", 1, actorList.get(0).getOrder());
@@ -135,12 +135,12 @@ public class ActorSortingServiceTest {
 		actorList.add(1,b);
 		actorList.add(2,c);
 		
-		Random random = mock(Random.class);
-		serviceUnderTest.setRandom(random);
+		Random random = mock(Random.class, withSettings().withoutAnnotations());
+		subject.setRandom(random);
 		when(random.nextInt(2)).thenReturn(1).//Increase c's initiative by 1 to tie with b
 								thenReturn(0);//Increase b's initiative so it is greater than c.
 		
-		actorList = serviceUnderTest.breakTiedInitiatives(actorList);
+		actorList = subject.breakTiedInitiatives(actorList);
 		assertEquals("actorList should be the same size:",3,actorList.size());
 		assertThat("Expected that actor a and b have different initiatives", 
 				actorList.get(0).getInitiative(), is(not(actorList.get(1).getInitiative())));
@@ -159,12 +159,12 @@ public class ActorSortingServiceTest {
 		Actor a2 = makeActorWithInitiative(1);
 		//Mock the random generator so we can make this 
 		//unit test deterministic.
-		Random random = mock(Random.class);
-		serviceUnderTest.setRandom(random);
+		Random random = mock(Random.class, withSettings().withoutAnnotations());
+		subject.setRandom(random);
 		when(random.nextInt(2)).thenReturn(0);
 		List<Actor> actorList;
 		/** when we get back the actors in a list **/
-		actorList = serviceUnderTest.breakInitiativeTie(a1, a2);
+		actorList = subject.breakInitiativeTie(a1, a2);
 		/** Then verify that the random Number generated updated the initiative of a2 **/
 		a1 = actorList.get(0);
 		a2 = actorList.get(1);//retrieve actor 2 from list
@@ -180,12 +180,12 @@ public class ActorSortingServiceTest {
 		Actor a2 = makeActorWithInitiative(1);
 		//Mock the random generator so we can make this 
 		//unit test deterministic.
-		Random random = mock(Random.class);
-		serviceUnderTest.setRandom(random);
+		Random random = mock(Random.class, withSettings().withoutAnnotations());
+		subject.setRandom(random);
 		when(random.nextInt(2)).thenReturn(1);
 		List<Actor> actorList;
 		/** when we get back the actors in a list **/
-		actorList = serviceUnderTest.breakInitiativeTie(a1, a2);
+		actorList = subject.breakInitiativeTie(a1, a2);
 		/** Then verify that the random Number generated updated the initiative of actor 2 **/
 		int actor1I = actorList.get(0).getInitiative();
 		int actor2I = actorList.get(1).getInitiative();//retrieve actor 2 from list
@@ -199,11 +199,11 @@ public class ActorSortingServiceTest {
 		int int1 = 400;
 		int int2 = 15;
 		
-		int higherNumber = serviceUnderTest.getHigherInitiative(int1,int2);
+		int higherNumber = subject.getHigherInitiative(int1,int2);
 		assertEquals("Higher Number is should be returned:",400, higherNumber);
 		
 		int2 = 415;
-		higherNumber = serviceUnderTest.getHigherInitiative(int1,int2);
+		higherNumber = subject.getHigherInitiative(int1,int2);
 		assertEquals("Higher Number is should be returned:",415, higherNumber);
 	}
 	
@@ -214,7 +214,7 @@ public class ActorSortingServiceTest {
 		actorList.add(1,makeActorWithInitiative(60));
 		actorList.add(2,makeActorWithInitiative(20));
 		
-		actorList = serviceUnderTest.orderActorList(actorList);
+		actorList = subject.orderActorList(actorList);
 		assertEquals("Expected Actor with initiative 60 to be first in the array.",60, actorList.get(0).getInitiative());
 		assertEquals("Expected Actor with initiative 20 to be second in the array.",20, actorList.get(1).getInitiative());
 		assertEquals("Expected Actor with initiative 60 to be first in the array.",3, actorList.get(2).getInitiative());
