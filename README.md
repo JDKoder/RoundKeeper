@@ -30,7 +30,7 @@ From Roundkeeper directory run
 To Run:
 ------
 navigate to _target_ directory
-`java -jar Roundkeeper.jar`
+`java -jar Roundkeeper-1.0.0.1.jar`
 
 note: be aware if you need to build in a 32 bit environment you'll have to update the build.xml and ivy.xml files to pull the correct swt files or this will not run.
 
