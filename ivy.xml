@@ -1,7 +1,9 @@
 <ivy-module version="2.0">
     <info organisation="com.warriorwebpros" module="RoundKeeper"/>
     <dependencies>
-		<!-- SWT GUI-->
+		<!-- Dependency Injection -->
+        <dependency org="com.google.inject" name="guice" rev="5.1.0"/>
+        <!-- SWT GUI-->
         <dependency org="org.eclipse.swt" name="org.eclipse.swt.gtk.linux.x86_64" rev="4.3"/>
         <!--<dependency org="org.eclipse.swt" name="org.eclipse.swt.gtk.linux.x86" rev="4.3"/>-->
         <!-- Test -->

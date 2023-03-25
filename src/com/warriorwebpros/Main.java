@@ -1,13 +1,13 @@
 package com.warriorwebpros;
-import java.util.ArrayList;
 
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.warriorwebpros.binders.ActorDataModule;
 import com.warriorwebpros.controller.ViewController;
-import com.warriorwebpros.model.Actor;
 import com.warriorwebpros.service.ActorDataService;
-import com.warriorwebpros.service.ActorSortingService;
 
 public class Main {
  
@@ -20,8 +20,9 @@ public class Main {
 		main.display = new Display();
 		main.shell = new Shell(main.display);
         main.viewController = new ViewController(main.display, main.shell);
-        //This makes me cringe.  Spring needs to happen soon.
-        main.viewController.setDataService(new ActorDataService(new ArrayList<Actor>(), new ActorSortingService()));
+		Injector injector = Guice.createInjector(new ActorDataModule());
+		ActorDataService dataService = injector.getInstance(ActorDataService.class);
+        main.viewController.setDataService(dataService);
         main.viewController.initializeDataEntryView();
         main.runProgramLoop();
         main.viewController.dispose();

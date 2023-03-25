@@ -1,16 +1,23 @@
 package com.warriorwebpros.service;
 
+import static com.warriorwebpros.binders.ActorDataModule.RandomTimeSeed;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Random;
+import java.util.random.RandomGenerator;
 
+import com.google.inject.Inject;
 import com.warriorwebpros.model.Actor;
 
 public class ActorSortingService {
 	
-	private Random random;
+	private RandomGenerator random;
+
+	@Inject
+	public ActorSortingService(@RandomTimeSeed RandomGenerator random) {
+		this.random = random;
+	}
 
 	/**
 	 * Set the Order on all Actor objects in the list based on their initiative scores.
@@ -46,18 +53,17 @@ public class ActorSortingService {
 	 * @return actorList
 	 */
 	protected List<Actor> resetActorOrder(List<Actor> actorList){
-		for(int i=0; i < actorList.size();i++){
-			actorList.get(i).setOrder(0);
+		for (Actor actor : actorList) {
+			actor.setOrder(0);
 		}
 		return actorList;
 	}
 
 	/**
-	 * This class iterates through all of the Actors and mutates the initiatives
+	 * This class iterates through all the Actors and mutates the initiatives
 	 * to be unique.  
 	 * This is a required step before calling setOrderByInitiative
 	 * to receive their order.
-	 * @param List<Actor> actorList
 	 * @return List<Actor> actorList
 	 */
 	public List<Actor> breakTiedInitiatives(List<Actor> actorList) {
@@ -78,37 +84,21 @@ public class ActorSortingService {
 															  getActorWithHigherInitiative(
 																	  actorList.get(index1), 
 																	  actorList.get(index2)));
-				} else {
-					continue;
 				}
 			}
 		}
 		return actorList;
 	}
-	
-	/**
-	 * Compares two actor's by their initiative scores.  Whichever actor
-	 * has a higher score is one returned.
-	 * @param actor1
-	 * @param actor2
-	 * @return
-	 */
+
 	private Actor getActorWithHigherInitiative(Actor a, Actor b){
-		Actor returnActor;
-		int higherInitiative = getHigherInitiative(a.getInitiative(),b.getInitiative());
-		if(a.getInitiative() == higherInitiative){
-			returnActor = a;
-		} else {
-			returnActor = b;
-		}
-		return returnActor;
+		return a.getInitiative() > b.getInitiative() ? a : b;
 	}
 	
 	private List<Actor> increaseHigherInitiativeThanActor(List<Actor> list, Actor actorToBeat){
-		for(int i=0; i<list.size(); i++){
-			if(list.get(i).getInitiative() >= actorToBeat.getInitiative() &&
-			   list.get(i) != actorToBeat){
-				   list.get(i).setInitiative(list.get(i).getInitiative() +1);
+		for (Actor actor : list) {
+			if (actor.getInitiative() >= actorToBeat.getInitiative() &&
+					actor != actorToBeat) {
+				actor.setInitiative(actor.getInitiative() + 1);
 			}
 		}
 		return list;
@@ -135,9 +125,6 @@ public class ActorSortingService {
 	}
 	
 	public List<Actor> breakInitiativeTie(Actor a1, Actor a2){
-		if(random == null){
-			random = new Random();
-		}
 		List<Actor> returnList = new ArrayList<Actor>();
 		if(random.nextInt(2)+1 == 1){
 			a1.setInitiative(a1.getInitiative()+1);
@@ -170,11 +157,6 @@ public class ActorSortingService {
 		}
 		return returnValue;
 	}
-	
-
-	public void setRandom(Random random) {
-		this.random = random;
-	}
 
 	/**
 	* If the array size is large enough, swap the actor's orderDependentVariables.
@@ -202,17 +184,22 @@ public class ActorSortingService {
 	}
 	
 	public void swapOrder(Actor a1, Actor a2) {
-		Actor temp = new Actor();
-		temp.setOrder(a1.getOrder());
-		a1.setOrder(a2.getOrder());
-		a2.setOrder(temp.getOrder());
+		//simple algorithm swaps a and b
+		//ex.
+		//a = 1 ; b = 3
+		//a = a + b = 4
+		//b = a - b = 1
+		//a = a - b = 3
+		//a = 3 ; b = 1
+		a1.setOrder(a1.getOrder() + a2.getOrder());
+		a2.setOrder(a1.getOrder() - a2.getOrder());
+		a1.setOrder(a1.getOrder() - a2.getOrder());
 	}
 	
 	public void swapInitiative(Actor a1, Actor a2) {
-		Actor temp = new Actor();
-		temp.setInitiative(a1.getInitiative());
-		a1.setInitiative(a2.getInitiative());
-		a2.setInitiative(temp.getInitiative());
+		a1.setInitiative(a1.getInitiative() + a2.getInitiative());
+		a2.setInitiative(a1.getInitiative() - a2.getInitiative());
+		a1.setInitiative(a1.getInitiative() - a2.getInitiative());
 	}
 	
 	private int getNextActorIndex(int lastIndex, List<Actor>actorList){

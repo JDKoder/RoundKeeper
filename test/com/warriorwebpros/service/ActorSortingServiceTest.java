@@ -1,30 +1,30 @@
 package com.warriorwebpros.service;
 
-import static org.junit.Assert.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-
-
-
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+import java.util.random.RandomGenerator;
 
-import org.junit.Before;
 import org.junit.Test;
-
-import static org.mockito.Mockito.*;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import com.warriorwebpros.model.Actor;
 
+@RunWith(MockitoJUnitRunner.StrictStubs.class)
 public class ActorSortingServiceTest {
 
+	@Mock
+	RandomGenerator random;
+	@InjectMocks
 	ActorSortingService subject;
-	
-	@Before
-	public void setUp() throws Exception {
-		subject = new ActorSortingService();
-	}
 
 	@Test
 	public void testResetActorOrder(){
@@ -134,9 +134,6 @@ public class ActorSortingServiceTest {
 		actorList.add(0,a);
 		actorList.add(1,b);
 		actorList.add(2,c);
-		
-		Random random = mock(Random.class, withSettings().withoutAnnotations());
-		subject.setRandom(random);
 		when(random.nextInt(2)).thenReturn(1).//Increase c's initiative by 1 to tie with b
 								thenReturn(0);//Increase b's initiative so it is greater than c.
 		
@@ -154,18 +151,14 @@ public class ActorSortingServiceTest {
 	
 	@Test
 	public void testBreakTieFirstActor(){
-		/**given two actors with the same initiative **/
+		//given two actors with the same initiative
 		Actor a1 = makeActorWithInitiative(1);
 		Actor a2 = makeActorWithInitiative(1);
-		//Mock the random generator so we can make this 
-		//unit test deterministic.
-		Random random = mock(Random.class, withSettings().withoutAnnotations());
-		subject.setRandom(random);
 		when(random.nextInt(2)).thenReturn(0);
 		List<Actor> actorList;
-		/** when we get back the actors in a list **/
+		//when we get back the actors in a list
 		actorList = subject.breakInitiativeTie(a1, a2);
-		/** Then verify that the random Number generated updated the initiative of a2 **/
+		//Then verify that the random Number generated updated the initiative of a2
 		a1 = actorList.get(0);
 		a2 = actorList.get(1);//retrieve actor 2 from list
 		verify(random).nextInt(2);
@@ -175,18 +168,14 @@ public class ActorSortingServiceTest {
 	
 	@Test
 	public void testBreakTieSecondActor(){
-		/**given two actors with the same initiative **/
+		//given two actors with the same initiative
 		Actor a1 = makeActorWithInitiative(1);
 		Actor a2 = makeActorWithInitiative(1);
-		//Mock the random generator so we can make this 
-		//unit test deterministic.
-		Random random = mock(Random.class, withSettings().withoutAnnotations());
-		subject.setRandom(random);
 		when(random.nextInt(2)).thenReturn(1);
 		List<Actor> actorList;
-		/** when we get back the actors in a list **/
+		// when we get back the actors in a list
 		actorList = subject.breakInitiativeTie(a1, a2);
-		/** Then verify that the random Number generated updated the initiative of actor 2 **/
+		// Then verify that the random Number generated updated the initiative of actor 2
 		int actor1I = actorList.get(0).getInitiative();
 		int actor2I = actorList.get(1).getInitiative();//retrieve actor 2 from list
 		verify(random).nextInt(2);
