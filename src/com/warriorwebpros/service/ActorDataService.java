@@ -1,7 +1,10 @@
 package com.warriorwebpros.service;
 
+import static com.warriorwebpros.binders.ActorDataModule.*;
 import java.util.List;
 
+import com.google.inject.Inject;
+import com.warriorwebpros.binders.ActorDataModule;
 import com.warriorwebpros.listeners.ActorListChangedListener;
 import com.warriorwebpros.model.Actor;
 
@@ -19,7 +22,8 @@ public class ActorDataService {
 
 	private ActorSortingService sortingService;
 	
-	public ActorDataService(List<Actor> actorList, ActorSortingService sortingService){
+	@Inject
+	public ActorDataService(@ActorList List<Actor> actorList, ActorSortingService sortingService){
 		masterList = actorList;
 		this.sortingService = sortingService;
 	}

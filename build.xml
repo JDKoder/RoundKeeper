@@ -87,7 +87,7 @@
                 <fileset dir="${outputDir}"/>
             </main>
             <lib>
-                <fileset dir="${libDir}" includes="*.jar"/>
+                <fileset dir="${libDir}" includes="*.jar" excludes="*javadoc.jar *sources.jar hamcrest* mockito*"/>
             </lib>
         </one-jar>
     </target>

@@ -12,7 +12,7 @@ import com.warriorwebpros.colors.RoundKeeperColorConstants;
 import com.warriorwebpros.listeners.ActorListChangedListener;
 import com.warriorwebpros.listeners.DigitVerificationListener;
 import com.warriorwebpros.service.ActorDataService;
-import com.warriorwebpros.views.ActorEntryView;
+import com.warriorwebpros.views.actor.ActorEntryView;
 import com.warriorwebpros.views.ActorTableView;
 import com.warriorwebpros.views.ButtonControlView;
 
