@@ -1,18 +1,17 @@
 RoundKeeper
 ===========
-Essentially this is really a practice project for TDD/BDD.  So far so good.
+This is a java application that uses SWT to render game keeper tools for tabletop games (mainly D&D).
 
 For sanity's sake, all NPC/PC's (Non/Player-Characters) are henceforth referred to as Actors.
-A round keeper for tabletop games where there is an initiative order. The interface provides controls to
+
+Currently Features:
+A round keeper for tabletop games where there is mutable turn order. The interface provides controls to
 - Add/Remove Actors to the intiative order on the fly
 - Modify an Actors initiative on the fly.
 - Track who's turn it is
-- Add other statistics to be tracked
-- Modify statistics of any Actors
-
 
 Currently Working On: 
-Implementing Spring for IOC
+View structure strategy (code scalability)
 
 Dependencies
 ----
