@@ -17,7 +17,7 @@ Dependencies
 ----
 Ant
 Ivy
-Java 19
+Java 17 (necessitated by the latest version of Guice)
 
 To build:
 -----
