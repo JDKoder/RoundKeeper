@@ -1,0 +1,32 @@
+so instead of getting dependencies as they are needed, we need to use an indirect dependency in order to make the code testable.  To do that, we use factories.
+
+However, the factory is one layer of abstraction and you have to actually write the factory class and the dependency is still there indirectly so there's a compilation time dependency.  The application isn't very modular and in larger programs are a mess of dependencies.  
+
+Testing this model is better, but now we have to add code for setup AND teardown.  If the code fails it will also necessitate a try finally in order to teardown your components.
+
+-- Dependency Injection by hand
+Hollywood Principle, we'll call you with your dependencies, don't call us for them.  Dependencies are obvious and they are part of your api.  
+
+But where they break down: is that we've broken the hard dependency and we're depending on the interfaces, but that factory code still exists and now we've got even more code to write.  So how do we keep our code model flexible without writing tons of these factory objects and cluttering up our codebase.
+
+Take the factories and replace them with injectors and modules.  Write a module that maps the interfaces to their implementations.  It's the factory you don't have to write or maintain.
+
+@Inject when someone wants to construct this use this constructor.
+
+Guice gives you type safety.  Bind looks at the class and looks at the class and makes sure all of its dependencies are avaible at runtime. In the factory pattern, you have to dig into the code and figure out what went wrong.  In Guice is gives you fail fast with nice error messages.
+
+Classes have dependencies
+> these are passed in automatically
+> identified by annotations
+
+Module Resolution -> Binding
+bind(Interface.class).to(Implementation.class);
+binding for Interface AND adds a binding to Implementation to it's constructor
+
+Everytime you want to add a configuration binding, you just need to add an annotation piece of metadata
+
+There's also instance configuration where you can bind something like
+bind(Integer.class).annotatedWith(Port.class).toInstance(8080)
+
+
+
