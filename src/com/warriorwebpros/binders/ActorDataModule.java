@@ -6,6 +6,7 @@ import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.random.RandomGenerator;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
@@ -26,7 +27,7 @@ public class ActorDataModule extends AbstractModule {
 
     @Provides
     @RandomTimeSeed
-    public Random provideRandom() {
+    public RandomGenerator provideRandom() {
         return new Random(java.time.LocalDateTime.now().toEpochSecond(ZoneOffset.UTC));
     }
 
