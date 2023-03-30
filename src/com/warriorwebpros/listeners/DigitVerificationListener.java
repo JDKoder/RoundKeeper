@@ -8,6 +8,10 @@ import org.eclipse.swt.events.VerifyListener;
  * Only allows the user to enter digits into the text field.  
  * The user is still able to paste non-decimal values into the field.
  *
+ * When setting the field to empty string on a widget
+ * the verifiers get called automatically.
+ * Therefore, this needs to handle allowing the event when
+ * character is /u0000 and the text is "".
  */
 public class DigitVerificationListener implements VerifyListener {
 
@@ -22,7 +26,8 @@ public class DigitVerificationListener implements VerifyListener {
 	            case SWT.ARROW_RIGHT:  // Right arrow
 	            	return;
 			}
-			if(!Character.isDigit(event.character)){
+			if(!Character.isDigit(event.character)
+					&& !(event.text.isEmpty() && event.character == '\u0000')) {
 				event.doit = false;
 			}
 		}

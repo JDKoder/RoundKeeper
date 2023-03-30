@@ -10,11 +10,10 @@ import org.eclipse.swt.widgets.Shell;
 
 import com.warriorwebpros.colors.RoundKeeperColorConstants;
 import com.warriorwebpros.listeners.ActorListChangedListener;
-import com.warriorwebpros.listeners.DigitVerificationListener;
 import com.warriorwebpros.service.ActorDataService;
-import com.warriorwebpros.views.ActorEntryView;
 import com.warriorwebpros.views.ActorTableView;
 import com.warriorwebpros.views.ButtonControlView;
+import com.warriorwebpros.views.actor.ActorEntryView;
 
 public class ViewController {
 	private Shell shell;
@@ -41,8 +40,7 @@ public class ViewController {
         shell.setBackground(
         		RoundKeeperColorConstants.GROUP_BACKGROUND.getColor(shell.getDisplay()));
 		dataService.setListeners(new ArrayList<ActorListChangedListener>());
-		entry = new ActorEntryView();
-		entry.setDigitVerifier(new DigitVerificationListener());
+		entry = new ActorEntryView(dataService);
 		entry.setDataService(dataService);
 		entry.initUI(shell);
 		table = new ActorTableView();

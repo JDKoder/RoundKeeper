@@ -5,25 +5,23 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 
-import com.warriorwebpros.model.Actor;
-import com.warriorwebpros.service.ActorDataService;
+public class AddActorButton extends Button {
 
-public class AddActorButton <T extends ActorDataService> extends Button {
-    T service;
-    public AddActorButton(Group group, GridData gd, T service) {
+    public static final int SELECT_ADD_ACTOR_EVENT_TYPE = 101;
+    public AddActorButton(Group group, GridData gd) {
         super(group, SWT.PUSH);
         setText("Add To Order");
         setLayoutData(gd);
+        addListeners(group);
     }
 
-    private void addListeners(){
+    private void addListeners(Group group){
         addSelectionListener(new SelectionListener() {
             @Override
             public void widgetSelected(SelectionEvent arg0) {
-                addNewActor();
+                group.notifyListeners(SELECT_ADD_ACTOR_EVENT_TYPE, null);
             }
 
             @Override
@@ -33,23 +31,6 @@ public class AddActorButton <T extends ActorDataService> extends Button {
         });
     }
 
-    private void addNewActor() {
-        notifyListeners(101, new Event());
-        //service.addActor(buildActorFromFields());
-    }
-
-    /*private Actor buildActorFromFields(){
-        String name = txtName.getText();
-        String initiativeRaw = txtInitiative.getText();
-        Integer initiative = Integer.parseInt(initiativeRaw);
-        String hitPointsRaw = txtHitPoints.getText();
-        if(hitPointsRaw == ""){
-            hitPointsRaw = "0";
-        }
-        Integer hitPoints = Integer.parseInt(hitPointsRaw);
-        return new Actor(name, initiative, hitPoints);
-    }*/
-
     @Override
     public void dispose() {
         super.dispose();
@@ -58,6 +39,6 @@ public class AddActorButton <T extends ActorDataService> extends Button {
 
     @Override
     protected void checkSubclass() {
-        //fuck you SWT I do what I want!
+        //Fuck you SWT! I do what I want!
     }
 }
