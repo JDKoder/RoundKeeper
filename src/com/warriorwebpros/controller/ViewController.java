@@ -6,10 +6,14 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 
 import com.warriorwebpros.colors.RoundKeeperColorConstants;
 import com.warriorwebpros.listeners.ActorListChangedListener;
+import com.warriorwebpros.listeners.DigitVerificationListener;
+import com.warriorwebpros.model.Actor;
 import com.warriorwebpros.service.ActorDataService;
 import com.warriorwebpros.views.ActorTableView;
 import com.warriorwebpros.views.ButtonControlView;
@@ -40,8 +44,8 @@ public class ViewController {
         shell.setBackground(
         		RoundKeeperColorConstants.GROUP_BACKGROUND.getColor(shell.getDisplay()));
 		dataService.setListeners(new ArrayList<ActorListChangedListener>());
-		entry = new ActorEntryView(dataService);
-		entry.setDataService(dataService);
+		//TODO:  Use dependency injection
+		entry = new ActorEntryView(new DigitVerificationListener());
 		entry.initUI(shell);
 		table = new ActorTableView();
 		table.setDataService(dataService);
@@ -50,6 +54,12 @@ public class ViewController {
 		buttons = new ButtonControlView();
 		buttons.setDataService(dataService);
 		buttons.initUI(shell);
+		shell.addListener(ActorEntryView.ACTOR_CREATED_EVENT_TYPE, event -> {
+			if(event.data instanceof Actor) {
+				dataService.addActor(((Actor)event.data));
+			}
+		});
+
 		shell.pack();
 		shell.open();
 	}
