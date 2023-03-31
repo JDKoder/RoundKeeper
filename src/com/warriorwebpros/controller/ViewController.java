@@ -1,18 +1,14 @@
 package com.warriorwebpros.controller;
 
+import static com.warriorwebpros.binders.ViewModule.*;
 import java.util.ArrayList;
 
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 
-import com.warriorwebpros.colors.RoundKeeperColorConstants;
+import com.google.inject.Inject;
 import com.warriorwebpros.listeners.ActorListChangedListener;
-import com.warriorwebpros.listeners.DigitVerificationListener;
 import com.warriorwebpros.model.Actor;
 import com.warriorwebpros.service.ActorDataService;
 import com.warriorwebpros.views.ActorTableView;
@@ -25,78 +21,47 @@ public class ViewController {
 	private ActorEntryView entry;
 	private ActorTableView table;
 	private ButtonControlView buttons;
+	private GridLayout gl;
 	
-	public ViewController(Display display, Shell shell){
+	@Inject
+	public ViewController(@MainShell Shell shell, ActorEntryView entry, ActorTableView table, ButtonControlView bcView, ActorDataService dataService){
 		this.shell = shell;
-		shell.setText("Round Keeper");
-		shell.setSize(400,200);
-		center(shell);
+		this.entry = entry;
+		this.table = table;
+		this.buttons = bcView;
+		this.dataService = dataService;
 	}
-	
+
+	public void runProgramLoop(){
+		while (!shell.isDisposed()) {
+			Display display = shell.getDisplay();
+			if (!display.readAndDispatch()) {
+				display.sleep();
+			}
+		}
+
+	}
 	public void initializeDataEntryView(){
 		//TODO: Inject these views
-		GridLayout gl = new GridLayout(2, true);
-        gl.horizontalSpacing = 4;
-        gl.verticalSpacing = 4;
-        gl.marginBottom = 5;
-        gl.marginTop = 5;
-        shell.setLayout(gl);
-        shell.setBackground(
-        		RoundKeeperColorConstants.GROUP_BACKGROUND.getColor(shell.getDisplay()));
-		dataService.setListeners(new ArrayList<ActorListChangedListener>());
-		//TODO:  Use dependency injection
-		entry = new ActorEntryView(new DigitVerificationListener());
 		entry.initUI(shell);
-		table = new ActorTableView();
-		table.setDataService(dataService);
 		dataService.addListener(table);
 		table.initUI(shell);
-		buttons = new ButtonControlView();
-		buttons.setDataService(dataService);
 		buttons.initUI(shell);
-		shell.addListener(ActorEntryView.ACTOR_CREATED_EVENT_TYPE, event -> {
-			if(event.data instanceof Actor) {
-				dataService.addActor(((Actor)event.data));
-			}
-		});
 
+		//Add Event Listeners
+		shell.addListener(ActorEntryView.ACTOR_CREATED_EVENT_TYPE, event -> dataService.addActor(((Actor)event.data)));
+		shell.addListener(ButtonControlView.ACTOR_REMOVAL_REQUEST_EVENT_TYPE, event -> dataService.removeActor());
+		shell.addListener(ButtonControlView.ACTOR_DELAY_REQUEST_EVENT_TYPE, event -> dataService.delayActorsTurn());
+
+		//Display the shell
 		shell.pack();
 		shell.open();
 	}
 	
 	public void dispose(){
-		//call dispose() all initialized views.
-	}
-	/**
-	 * Centers the shell within its own display.
-	 * @param shell
-	 */
-	private void center(Shell shell){
-		Rectangle bds = shell.getMonitor().getBounds();
-		Point p = shell.getSize();
-		int nLeft = (bds.width - p.x) / 2;
-		System.out.println("bds.width: " + bds.width);
-		System.out.println("p.x: " + p.x);
-		System.out.println("nLeft: " + nLeft);
-        int nTop = (bds.height - p.y) / 2;
-        System.out.println("bds.height: " + bds.height);
-        System.out.println("p.y: " + p.y);
-        System.out.println("nTop: " + nTop);
-        
-        Rectangle r= new Rectangle(nLeft, nTop, p.x, p.y);
-        
-        shell.setBounds(r);
+		//TODO: Call dispose on all dependent views
+		shell.dispose();
+		shell.getDisplay().dispose();
 	}
 
-	public void setTable(ActorTableView table) {
-		this.table = table;
-	}
-
-	public void setEntry(ActorEntryView entry) {
-		this.entry = entry;
-	}
-	
-	public void setDataService(ActorDataService dataService) {
-		this.dataService = dataService;
-	}
 }

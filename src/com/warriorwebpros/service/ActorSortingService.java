@@ -165,7 +165,7 @@ public class ActorSortingService {
 	* @param actorList
 	*/
 	public List<Actor> swapWithNextActor(Actor delayingActor, List<Actor> masterList) {
-		if(canSwap(masterList)){ //Don't swap anything if there isn't anything to swap
+		if(canSwap(masterList) && delayingActor != null){ //Don't swap anything if there isn't anything to swap
 			int delayingActorIndex = masterList.indexOf(delayingActor);
 			Actor delayedActor = masterList.get(delayingActorIndex);
 			int nextActorIndex = getNextActorIndex(delayingActorIndex, masterList);

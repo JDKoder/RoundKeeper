@@ -14,38 +14,35 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
 
 import com.google.inject.Inject;
-import com.warriorwebpros.binders.VerificationListenerModule;
-import com.warriorwebpros.binders.VerificationListenerModule.Digit;
+import com.google.inject.Provider;
 import com.warriorwebpros.colors.RoundKeeperColorConstants;
 import com.warriorwebpros.listeners.DigitVerificationListener;
 import com.warriorwebpros.model.Actor;
-import com.warriorwebpros.service.ActorDataService;
-import com.warriorwebpros.views.IRoundKeeperView;
+import com.warriorwebpros.views.AbstractView;
 
-public class ActorEntryView implements IRoundKeeperView {
+public class ActorEntryView extends AbstractView {
 	public static final int ACTOR_CREATED_EVENT_TYPE = 102;
-	//TODO: use a provider instead of the direct class
-	private final DigitVerificationListener digitVerifier;
+	private final Provider<DigitVerificationListener> digitVerifier;
 
 	//TODO determine how to identify the widgets as data input widgets.
 	private final List<Widget> managedWidgets = new ArrayList<>();
 
-//TODO: inject
-	public ActorEntryView(DigitVerificationListener digitVerifier) {
+	@Inject
+	public ActorEntryView(Provider<DigitVerificationListener> digitVerifier) {
 		this.digitVerifier = digitVerifier;
 	}
-
 
 	@Override
 	public void initUI(Shell shell) {
         Group group = new Group(shell,SWT.FILL);
         group.setBackground(
-        		RoundKeeperColorConstants.GROUP_BACKGROUND.getColor(shell.getDisplay()));
+        		RoundKeeperColorConstants.DARK_BACKGROUND.getColor(shell.getDisplay()));
         group.setForeground(
         		RoundKeeperColorConstants.LABEL_TEXT.getColor(shell.getDisplay()));
         GridLayout compositeGL = new GridLayout(2, false);
         group.setLayout(compositeGL);
         group.setText("Add Actor");
+		managedWidgets.add(group);
 
         GridData gridDataLeft = new GridData();
         GridData gridDataRight = new GridData(SWT.FILL, SWT.FILL, false, false);
@@ -68,7 +65,7 @@ public class ActorEntryView implements IRoundKeeperView {
 
 		Text txt_Initiative = new Text(group, SWT.SINGLE);
         txt_Initiative.setLayoutData(gridDataRight);
-        txt_Initiative.addVerifyListener(digitVerifier);
+        txt_Initiative.addVerifyListener(digitVerifier.get());
 		managedWidgets.add(txt_Initiative);
         
         //HitPoints Row
@@ -79,7 +76,7 @@ public class ActorEntryView implements IRoundKeeperView {
 
 		Text txt_HitPoints = new Text(group, SWT.SINGLE);
         txt_HitPoints.setLayoutData(gridDataRight);
-        txt_HitPoints.addVerifyListener(digitVerifier);
+        txt_HitPoints.addVerifyListener(digitVerifier.get());
 		managedWidgets.add(txt_HitPoints);
 
         //Button Row
@@ -101,31 +98,6 @@ public class ActorEntryView implements IRoundKeeperView {
 		});
 	}
 
-	/**
-	 * Iterates through the widgets in the view and
-	 * Uses reflection to:
-	 * <ul>
-	 *     <li>Clear the text inputs of Text widgets</li>
-	 * </ul>
-	 */
-	private void resetInputs() {
-		for (Widget widget : managedWidgets) {
-			if(!widget.isDisposed() && widget instanceof Text) {
-				((Text)widget).setText("");
-			}
-		}
-	}
-	/**
-	 * SWT doesn't automatically garbage collect its UI components.
-	 * Calling dispose on each one will  
-	 */
-	@Override
-	public void cleanUpUI() {
-		for (Widget widget : managedWidgets) {
-			widget.dispose();
-		}
-	}
-	
 	private Actor buildActor(String nameStr, String initiativeStr, String hitPointsStr){
 		initiativeStr = initiativeStr.isBlank() ? "0" : initiativeStr;
 		hitPointsStr = hitPointsStr.isBlank() ? "0" : hitPointsStr;

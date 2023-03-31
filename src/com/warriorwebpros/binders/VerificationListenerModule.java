@@ -15,10 +15,10 @@ public class VerificationListenerModule extends AbstractModule {
 
     @Qualifier
     @Retention(RetentionPolicy.RUNTIME)
-    public @interface Digit{}
+    public @interface DigitVerifier {}
 
     @Provides
-    @Digit
+    @DigitVerifier
     public VerifyListener provideDigitVerificationListener() {
         return new DigitVerificationListener();
     }

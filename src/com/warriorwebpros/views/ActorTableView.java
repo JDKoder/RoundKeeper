@@ -1,5 +1,6 @@
 package com.warriorwebpros.views;
 
+import static com.warriorwebpros.binders.ViewModule.*;
 import java.util.EventObject;
 import java.util.List;
 
@@ -12,20 +13,30 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
+import com.google.inject.Inject;
+import com.google.inject.Provider;
+import com.warriorwebpros.binders.ViewModule;
 import com.warriorwebpros.listeners.ActorListChangedListener;
 import com.warriorwebpros.model.Actor;
 import com.warriorwebpros.service.ActorDataService;
 
-public class ActorTableView implements IRoundKeeperView, ActorListChangedListener{
+
+public class ActorTableView extends AbstractView implements ActorListChangedListener{
 
 	ActorDataService dataService;
 	Table table;
-	
+
+	@Inject
+	public ActorTableView(ActorDataService dataService) {
+		this.dataService = dataService;
+	}
+
 	@Override
 	public void initUI(Shell shell) {
 		table = new Table(shell, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
-	    table.setLinesVisible(true);
+		table.setLinesVisible(true);
 	    table.setHeaderVisible(true);
+
 	    GridData data = new GridData(SWT.FILL, SWT.FILL, true, true);
 	    data.horizontalSpan=2;
 	    data.heightHint = 200;
@@ -43,7 +54,7 @@ public class ActorTableView implements IRoundKeeperView, ActorListChangedListene
 	    for (int i=0; i<titles.length; i++) {
 	      table.getColumn (i).pack ();
 	    }
-	    
+		managedWidgets.add(table);
 	    addTableSelectionListener();
 	}
 	
@@ -79,21 +90,9 @@ public class ActorTableView implements IRoundKeeperView, ActorListChangedListene
 		});
     }
 	
-	/**
-	 * SWT doesn't automatically garbage collect its UI components.
-	 * Calling dispose on each one will  
-	 */
-	@Override
-	public void cleanUpUI() {
-	}
-	
 	@Override
 	public void handleActorListChanged(EventObject event, List<Actor> list) {
 		setTableItems();
-	}
-	
-	public void setDataService(ActorDataService service){
-		dataService = service;
 	}
 
 }

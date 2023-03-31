@@ -10,7 +10,9 @@ import java.util.random.RandomGenerator;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+import com.warriorwebpros.listeners.ActorListChangedListener;
 import com.warriorwebpros.model.Actor;
+import com.warriorwebpros.service.ActorDataService;
 import com.warriorwebpros.service.ActorSortingService;
 
 import javax.inject.Qualifier;
@@ -25,6 +27,10 @@ public class ActorDataModule extends AbstractModule {
     @Retention(RetentionPolicy.RUNTIME)
     public @interface ActorList {}
 
+    @Qualifier
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface ActorListeners {}
+
     @Provides
     @RandomTimeSeed
     public RandomGenerator provideRandom() {
@@ -37,7 +43,10 @@ public class ActorDataModule extends AbstractModule {
         return new ArrayList<>();
     }
 
-
-
+    @Provides
+    @ActorListeners
+    public List<ActorListChangedListener> provideListChangeListeners() {
+        return new ArrayList<>();
+    }
 
 }

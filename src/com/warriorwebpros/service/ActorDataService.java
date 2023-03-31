@@ -1,10 +1,11 @@
 package com.warriorwebpros.service;
 
-import static com.warriorwebpros.binders.ActorDataModule.*;
+import static com.warriorwebpros.binders.ActorDataModule.ActorList;
+import static com.warriorwebpros.binders.ActorDataModule.ActorListeners;
 import java.util.List;
 
 import com.google.inject.Inject;
-import com.warriorwebpros.binders.ActorDataModule;
+import com.google.inject.Singleton;
 import com.warriorwebpros.listeners.ActorListChangedListener;
 import com.warriorwebpros.model.Actor;
 
@@ -15,16 +16,21 @@ import com.warriorwebpros.model.Actor;
  * @author KriegerJ
  *
  */
+//TODO: This should not be a singleton, rather it should have a reference to a singleton data source
+@Singleton
 public class ActorDataService {
+	//TODO: refactor to be accessible through data source facade
 	private List<Actor> masterList;
+	//TODO: refactor to be accessible through data source facade
 	private List<ActorListChangedListener> listeners;
 	private Actor selectedActor;
 
 	private ActorSortingService sortingService;
 	
 	@Inject
-	public ActorDataService(@ActorList List<Actor> actorList, ActorSortingService sortingService){
-		masterList = actorList;
+	public ActorDataService(@ActorList List<Actor> actorList, @ActorListeners List<ActorListChangedListener> listeners, ActorSortingService sortingService){
+		this.masterList = actorList;
+		this.listeners = listeners;
 		this.sortingService = sortingService;
 	}
 	

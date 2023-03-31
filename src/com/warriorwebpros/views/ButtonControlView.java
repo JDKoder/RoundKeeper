@@ -1,88 +1,61 @@
 package com.warriorwebpros.views;
 
+import static com.warriorwebpros.binders.ViewModule.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Widget;
 
+import com.google.inject.Provider;
 import com.warriorwebpros.colors.RoundKeeperColorConstants;
-import com.warriorwebpros.service.ActorDataService;
+import com.warriorwebpros.views.actor.DelayActorTurnButton;
+import com.warriorwebpros.views.actor.RemoveActorButton;
 
-public class ButtonControlView implements IRoundKeeperView{
+import javax.inject.Inject;
 
-	private Button btn_delayTurn;
-	private Button btn_remove;
-	private ActorDataService dataService;
-	
+public class ButtonControlView extends AbstractView{
+
+	public static final int ACTOR_REMOVAL_REQUEST_EVENT_TYPE = 104;
+	public static final int ACTOR_DELAY_REQUEST_EVENT_TYPE = 106;
+	@Inject
+	public ButtonControlView() {}
+
 	@Override
 	public void initUI(Shell shell) {
-        Group composite = new Group(shell,SWT.FILL);
-        composite.setText("Table Controls");
+        Group group = new Group(shell,SWT.FILL);
+        group.setText("Table Controls");
         GridLayout groupGL = new GridLayout(2, true);
-        composite.setLayout(groupGL);
+        group.setLayout(groupGL);
         
-        composite.setBackground(
+        group.setBackground(
         		RoundKeeperColorConstants.GROUP_BACKGROUND.getColor(shell.getDisplay()));
 
-        GridData gridDataLeft = new GridData();
-        GridData gridDataRight = new GridData();
-        gridDataLeft.widthHint = 155;
-        gridDataRight.widthHint = 155;
-
         //Delay Turn
-        btn_delayTurn = new Button(composite, SWT.PUSH);
-        btn_delayTurn.setText("Delay Turn");
-        btn_delayTurn.setLayoutData(gridDataLeft);
-        //Remove
-        btn_remove = new Button(composite, SWT.PUSH);
-        btn_remove.setText("Remove Actor");
-        btn_remove.setLayoutData(gridDataRight);
-        
-        addListeners();
-	}
-	
-	private void addListeners(){
-		btn_delayTurn.addSelectionListener(new SelectionListener() {
-			@Override
-			public void widgetSelected(SelectionEvent arg0) {
-				dataService.delayActorsTurn();
-			}
-
-			@Override
-			public void widgetDefaultSelected(SelectionEvent arg0) {
-				widgetSelected(arg0);				
-			}
+        GridData gridDataLeft = new GridData();
+        gridDataLeft.widthHint = 155;
+        Button btn_delayTurn = new DelayActorTurnButton(group, gridDataLeft);
+		group.addListener(DelayActorTurnButton.SELECT_DELAY_TURN_EVENT_TYPE, event -> {
+			shell.notifyListeners(ACTOR_DELAY_REQUEST_EVENT_TYPE, event);
 		});
-		
-		btn_remove.addSelectionListener(new SelectionListener() {
-			@Override
-			public void widgetSelected(SelectionEvent arg0) {
-				dataService.removeActor();
-			}
 
-			@Override
-			public void widgetDefaultSelected(SelectionEvent arg0) {
-				widgetSelected(arg0);				
-			}
+		//Remove Actor
+        GridData gridDataRight = new GridData();
+        gridDataRight.widthHint = 155;
+        Button btn_remove = new RemoveActorButton(group, gridDataRight);
+		group.addListener(RemoveActorButton.SELECT_REMOVE_ACTOR_EVENT_TYPE, event -> {
+			shell.notifyListeners(ACTOR_REMOVAL_REQUEST_EVENT_TYPE, event);
 		});
 	}
 
-	
-	/**
-	 * SWT doesn't automatically garbage collect its UI components.
-	 * Calling dispose on each one will  
-	 */
-	@Override
-	public void cleanUpUI() {
-		btn_delayTurn.dispose();
-		btn_remove.dispose();
-	}
-	
-	public void setDataService(ActorDataService dataService) {
-		this.dataService = dataService;
-	}
+
 }
