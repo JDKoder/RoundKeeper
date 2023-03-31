@@ -1,4 +1,4 @@
-package com.warriorwebpros.views.actor;
+package com.warriorwebpros.views;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,7 @@ import com.google.inject.Provider;
 import com.warriorwebpros.colors.RoundKeeperColorConstants;
 import com.warriorwebpros.listeners.DigitVerificationListener;
 import com.warriorwebpros.model.Actor;
-import com.warriorwebpros.views.AbstractView;
+import com.warriorwebpros.views.widgets.AddActorButton;
 
 public class ActorEntryView extends AbstractView {
 	public static final int ACTOR_CREATED_EVENT_TYPE = 102;

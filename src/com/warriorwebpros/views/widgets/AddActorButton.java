@@ -1,4 +1,4 @@
-package com.warriorwebpros.views.actor;
+package com.warriorwebpros.views.widgets;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;

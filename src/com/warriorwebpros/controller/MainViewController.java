@@ -1,6 +1,6 @@
 package com.warriorwebpros.controller;
 
-import static com.warriorwebpros.binders.ViewModule.*;
+import static com.warriorwebpros.binders.ViewModule.MainShell;
 
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -8,9 +8,9 @@ import org.eclipse.swt.widgets.Shell;
 import com.google.inject.Inject;
 import com.warriorwebpros.model.Actor;
 import com.warriorwebpros.service.ActorDataService;
+import com.warriorwebpros.views.ActorEntryView;
 import com.warriorwebpros.views.ActorTableView;
 import com.warriorwebpros.views.ButtonControlView;
-import com.warriorwebpros.views.actor.ActorEntryView;
 
 public class MainViewController {
 	private final Shell shell;
@@ -38,10 +38,10 @@ public class MainViewController {
 
 	}
 	public void initializeDataEntryView(){
-		//TODO: Inject these views
+		//layout is determined by order
 		entry.initUI(shell);
-		table.initUI(shell);
 		buttons.initUI(shell);
+		table.initUI(shell);
 
 		//Add Event Listeners
 		shell.addListener(ActorEntryView.ACTOR_CREATED_EVENT_TYPE, event -> {

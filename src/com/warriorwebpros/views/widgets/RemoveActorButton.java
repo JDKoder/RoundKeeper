@@ -1,4 +1,4 @@
-package com.warriorwebpros.views.actor;
+package com.warriorwebpros.views.widgets;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -8,12 +8,12 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 
-public class DelayActorTurnButton extends Button {
+public class RemoveActorButton extends Button {
 
-    public static final int SELECT_DELAY_TURN_EVENT_TYPE = 105;
-    public DelayActorTurnButton(Group group, GridData gd) {
+    public static final int SELECT_REMOVE_ACTOR_EVENT_TYPE = 103;
+    public RemoveActorButton(Group group, GridData gd) {
         super(group, SWT.PUSH);
-        setText("Delay Turn");
+        setText("Remove Actor");
         setLayoutData(gd);
         addListeners(group);
     }
@@ -22,7 +22,7 @@ public class DelayActorTurnButton extends Button {
         addSelectionListener(new SelectionListener() {
             @Override
             public void widgetSelected(SelectionEvent arg0) {
-                group.notifyListeners(SELECT_DELAY_TURN_EVENT_TYPE, new Event());
+                group.notifyListeners(SELECT_REMOVE_ACTOR_EVENT_TYPE, new Event());
             }
 
             @Override

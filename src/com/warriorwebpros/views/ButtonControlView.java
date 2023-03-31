@@ -1,25 +1,15 @@
 package com.warriorwebpros.views;
 
-import static com.warriorwebpros.binders.ViewModule.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Widget;
 
-import com.google.inject.Provider;
 import com.warriorwebpros.colors.RoundKeeperColorConstants;
-import com.warriorwebpros.views.actor.DelayActorTurnButton;
-import com.warriorwebpros.views.actor.RemoveActorButton;
+import com.warriorwebpros.views.widgets.DelayActorTurnButton;
+import com.warriorwebpros.views.widgets.RemoveActorButton;
 
 import javax.inject.Inject;
 
@@ -38,7 +28,7 @@ public class ButtonControlView extends AbstractView{
         group.setLayout(groupGL);
         
         group.setBackground(
-        		RoundKeeperColorConstants.GROUP_BACKGROUND.getColor(shell.getDisplay()));
+        		RoundKeeperColorConstants.DARK_BACKGROUND.getColor(shell.getDisplay()));
 
         //Delay Turn
         GridData gridDataLeft = new GridData();
