@@ -60,8 +60,10 @@ public class MainViewController {
 	}
 	
 	public void dispose(){
-		//TODO: Call dispose on all dependent views
 		shell.dispose();
+		entry.cleanUpUI();
+		buttons.cleanUpUI();
+		table.cleanUpUI();
 		shell.getDisplay().dispose();
 	}
 

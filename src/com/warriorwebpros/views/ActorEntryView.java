@@ -24,9 +24,6 @@ public class ActorEntryView extends AbstractView {
 	public static final int ACTOR_CREATED_EVENT_TYPE = 102;
 	private final Provider<DigitVerificationListener> digitVerifier;
 
-	//TODO determine how to identify the widgets as data input widgets.
-	private final List<Widget> managedWidgets = new ArrayList<>();
-
 	@Inject
 	public ActorEntryView(Provider<DigitVerificationListener> digitVerifier) {
 		this.digitVerifier = digitVerifier;

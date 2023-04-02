@@ -29,6 +29,7 @@ public class ButtonControlView extends AbstractView{
         
         group.setBackground(
         		RoundKeeperColorConstants.DARK_BACKGROUND.getColor(shell.getDisplay()));
+		managedWidgets.add(group);
 
         //Delay Turn
         GridData gridDataLeft = new GridData();
@@ -37,6 +38,7 @@ public class ButtonControlView extends AbstractView{
 		group.addListener(DelayActorTurnButton.SELECT_DELAY_TURN_EVENT_TYPE, event -> {
 			shell.notifyListeners(ACTOR_DELAY_REQUEST_EVENT_TYPE, event);
 		});
+		managedWidgets.add(btn_delayTurn);
 
 		//Remove Actor
         GridData gridDataRight = new GridData();
@@ -45,6 +47,7 @@ public class ButtonControlView extends AbstractView{
 		group.addListener(RemoveActorButton.SELECT_REMOVE_ACTOR_EVENT_TYPE, event -> {
 			shell.notifyListeners(ACTOR_REMOVAL_REQUEST_EVENT_TYPE, event);
 		});
+		managedWidgets.add(btn_remove);
 	}
 
 
