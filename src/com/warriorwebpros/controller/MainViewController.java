@@ -51,7 +51,9 @@ public class MainViewController {
 			table.handleActorListChanged(dataService.removeActorAt(table.getSelectedIndex()));
 		});
 		shell.addListener(ButtonControlView.ACTOR_DELAY_REQUEST_EVENT_TYPE, event -> {
-			table.handleActorListChanged(dataService.delayActorAt(table.getSelectedIndex()));
+			var lastSelectedIndex = table.getSelectedIndex();
+			var newList = dataService.delayActorAt(lastSelectedIndex);
+			table.handleDelayActor(newList, lastSelectedIndex);
 		});
 
 		//Display the shell

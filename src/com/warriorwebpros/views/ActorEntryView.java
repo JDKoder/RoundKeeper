@@ -91,6 +91,7 @@ public class ActorEntryView extends AbstractView {
 			actorEntryViewEvent.data = actor;
 			actorEntryViewEvent.widget = group;
 			shell.notifyListeners(ACTOR_CREATED_EVENT_TYPE, actorEntryViewEvent);
+			txt_Name.forceFocus();
 			resetInputs();
 		});
 	}

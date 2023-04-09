@@ -52,7 +52,18 @@ public class ActorTableView extends AbstractView {
 	public int getSelectedIndex() {
 		return table.getSelectionIndex();
 	}
-	
+
+	public void handleDelayActor(List<Actor> list, int lastSelectedIndex) {
+		int newSelection = -1;
+		handleActorListChanged(list);
+		if(!list.isEmpty()) {
+			if (list.size() > 1 && lastSelectedIndex < (list.size() - 1))
+				newSelection = lastSelectedIndex + 1;
+			else
+				newSelection = 0;
+			table.setSelection(newSelection);
+		}
+	}
 	public void handleActorListChanged(List<Actor> list) {
 		setTableItems(list);
 	}
