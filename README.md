@@ -13,6 +13,14 @@ A round keeper for tabletop games where there is mutable turn order. The interfa
 Currently Working On: 
 View structure strategy (code scalability)
 
+Distribution
+----
+Currently there is no formal distribution.  If you would like to try the program without warranty or support, there is a runnable jar inside of the dist folder.
+
+Roundkeeper-{version}-{system}.jar
+
+Skip to "To Run" section for instructions on executing the jar.
+
 Dependencies
 ----
 Ant
