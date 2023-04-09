@@ -6,7 +6,8 @@ import org.eclipse.swt.graphics.Device;
 public enum RoundKeeperColorConstants{
 	TITLE_FONT(255,255,255),
 	GROUP_BACKGROUND(200,200,200),
-	LABEL_TEXT(250,250,250);
+	LABEL_TEXT(250,250,250),
+	DARK_BACKGROUND(50,50,50);
 
 	Color color;
 	int red;
