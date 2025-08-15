@@ -1,3 +1,9 @@
+Disclaimer:   If you want something functional for the sake of keeping track of your D&D game, just go use excel.  I may never fix the simple things keeping this project from being actually useful (though I have opened issues for some of them).
+
+This project is mostly the product of curiosity around whether it was feasible to build an offline application in java with swt, ivy, and guice.  The goal was to test implementation for different build technologies, IoC implementations and GUI stuff that no one even uses anymore simply out of curiosity.  It became an overengineered frankenstein so it will probably never get the love it might, at this point, deserve.  There are far better languages (and ways) to implement this, but at the time, I was using Java for my job and so this project is written in Java.
+
+This project is more of a "what if I..." experiment rather than something meant to be useful.
+
 RoundKeeper
 ===========
 This is a java application that uses SWT to render game keeper tools for tabletop games (mainly D&D).
@@ -11,7 +17,8 @@ A round keeper for tabletop games where there is mutable turn order. The interfa
 - Track who's turn it is
 
 Currently Working On: 
-View structure strategy (code scalability)
+--View structure strategy (code scalability)--
+
 
 Distribution
 ----
